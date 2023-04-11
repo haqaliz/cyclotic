@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { firebase } from '../config.js';
 import authRouter from './auth.js';
+import usersRouter from './users.js';
 
 const init = () => {
   const app = express();
@@ -18,6 +19,7 @@ const init = () => {
   });
 
   app.use('/auth', authRouter);
+  app.use('/users', usersRouter);
 
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);

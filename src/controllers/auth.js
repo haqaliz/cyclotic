@@ -5,8 +5,8 @@ export const signup = async (req, res) => {
         req.body.email,
         req.body.password,
     );
-    if (!r) res.sendStatus(400);
-    res.sendStatus(200);
+    if (!r) return res.sendStatus(400);
+    return res.sendStatus(200);
 };
 
 export const login = async (req, res) => {
@@ -14,13 +14,13 @@ export const login = async (req, res) => {
         req.body.email,
         req.body.password,
     );
-    if (!r) res.status(404).send('User Not found');
+    if (!r) return res.status(404).send('User Not found');
     return res.sendStatus(200);
 };
 
 export const logout = async (req, res) => {
     const r = await authService.logout();
-    if (!r) res.status(400).send("Couldn't logout");
+    if (!r) return res.status(400).send("Couldn't logout");
     return res.sendStatus(200);
 };
 
