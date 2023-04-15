@@ -1,1 +1,1 @@
-export { default as firebase } from './firebase.js';
+export { default as firestore } from './firestore/index.js';
