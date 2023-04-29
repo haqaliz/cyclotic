@@ -9,11 +9,19 @@ export const getRecordedDaysForUser = async (req, res) => {
 export const addRecordedDayForUser = async (req, res) => {
   const context = {
     user_id: req.params.id,
-    // deconstruct body for whole data of recorded day
+    feelings: req.body.feelings,
+    symptoms: req.body.symptoms,
+    vaginal_discharge: req.body.vaginal_discharge,
+    misc: req.body.misc,
+    bleeding_amount: req.body.bleeding_amount,
+    bleeding_type: req.body.bleeding_type,
+    blood_color: req.body.blood_color,
+    pregnancy_test: req.body.pregnancy_test,
+    sex_situation: req.body.sex_situation,
+    medications: req.body?.medications ?? null,
   };
-  const r = await recordedDaysService
+  await recordedDaysService
     .addRecordedDayForUser(context);
-  if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
 };
 

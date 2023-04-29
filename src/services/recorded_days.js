@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 import { firebase } from '../config.js';
 
 export const getRecordedDaysForUser = async (userId) => {
@@ -16,8 +16,8 @@ export const getRecordedDaysForUser = async (userId) => {
 };
 
 export const addRecordedDayForUser = async (context) => {
-  // use context to store it in firestore
-  return true;
+  const ref = doc(collection(firebase.db, 'recorded_days'));
+  await setDoc(ref, context);
 };
 
 export default {

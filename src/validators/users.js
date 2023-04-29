@@ -114,9 +114,6 @@ export const addRecordedDayForUser = [
   param('id')
     .trim()
     .notEmpty(),
-  body('user_id')
-    .trim()
-    .notEmpty(),
   body('feelings')
     .isArray()
     .custom(isValidFeelings),
