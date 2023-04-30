@@ -23,6 +23,7 @@ export const addRecordedDayForUser = async (context) => {
       'recorded_days',
     ),
     and(
+      where('user_id', '==', context?.user_id),
       where('created_at', '>=', startOfToday()),
       where('created_at', '<=', endOfToday()),
     ),
@@ -38,6 +39,7 @@ export const addRecordedDayForUser = async (context) => {
     ...context,
     created_at: startOfToday(),
   });
+  return ref;
 };
 
 export default {
