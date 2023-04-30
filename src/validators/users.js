@@ -151,6 +151,61 @@ export const addRecordedDayForUser = [
     .notEmpty()
 ];
 
+export const updateRecordedDayForUser = [
+  param('id')
+    .trim()
+    .notEmpty(),
+  param('recorded_day_id')
+    .trim()
+    .notEmpty(),
+  body('feelings')
+    .isArray()
+    .custom(isValidFeelings),
+  body('symptoms')
+    .isArray()
+    .custom(isValidSymptoms),
+  body('vaginal_discharge')
+    .isArray()
+    .custom(isValidVaginalDischarge),
+  body('misc')
+    .isArray()
+    .custom(isValidMisc),
+  body('bleeding_amount')
+    .notEmpty()
+    .custom(isValidBleedingAmount),
+  body('bleeding_type')
+    .trim()
+    .notEmpty()
+    .custom(isValidBleedingType),
+  body('blood_color')
+    .trim()
+    .notEmpty()
+    .custom(isValidBloodColor),
+  body('pregnancy_test')
+    .trim()
+    .notEmpty()
+    .custom(isValidPregnancyTest),
+  body('sex_situation')
+    .trim()
+    .notEmpty()
+    .custom(isValidSexSituation),
+  body('medications')
+    .optional()
+    .trim()
+    .notEmpty()
+];
+
+export const deleteRecordedDayForUser = [
+  param('id')
+    .trim()
+    .notEmpty(),
+  param('recorded_day_id')
+    .trim()
+    .notEmpty(),
+];
+
 export default {
   addRecordedDayForUser,
+  updateRecordedDayForUser,
+  deleteRecordedDayForUser,
 };

@@ -1,4 +1,15 @@
-import { collection, query, where, and, getDocs, getCountFromServer, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  and,
+  getDocs,
+  getDoc,
+  getCountFromServer,
+  doc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { firebase } from '../config.js';
 import { startOfToday, endOfToday } from 'date-fns';
 
@@ -38,11 +49,33 @@ export const addRecordedDayForUser = async (context) => {
   await setDoc(ref, {
     ...context,
     created_at: startOfToday(),
+    updated_at: startOfToday(),
   });
+  return ref;
+};
+
+export const updateRecordedDayForUser = async (recordedDayId, context) => {
+  const ref = doc(firebase.db, 'recorded_days', recordedDayId);
+  const snapshot = await getDoc(ref);
+  if (!snapshot.exists()) return;
+  const recordedDay = snapshot.data();
+  await setDoc(ref, {
+    ...context,
+    created_at: startOfToday(),
+    updated_at: startOfToday(),
+  });
+  return ref;
+};
+
+export const deleteRecordedDayForUser = async (context) => {
+  const ref = doc(firebase.db, 'recorded_days', context.recorded_day_id);
+  await deleteDoc(ref);
   return ref;
 };
 
 export default {
   getRecordedDaysForUser,
   addRecordedDayForUser,
+  updateRecordedDayForUser,
+  deleteRecordedDayForUser,
 };
