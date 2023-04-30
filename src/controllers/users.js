@@ -20,8 +20,9 @@ export const addRecordedDayForUser = async (req, res) => {
     sex_situation: req.body.sex_situation,
     medications: req.body?.medications ?? null,
   };
-  await recordedDaysService
+  const r = await recordedDaysService
     .addRecordedDayForUser(context);
+  if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
 };
 
