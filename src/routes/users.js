@@ -4,6 +4,8 @@ import { users as usersValidator, utils } from '../validators/index.js';
 
 const router = express.Router();
 
+router.use(utils.isPrivileged);
+
 // adding recorded day for a user
 router.post(
   '/:id/recorded-day',

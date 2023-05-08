@@ -1,5 +1,10 @@
 import { validationResult } from 'express-validator';
 
+export const isPrivileged = (req, res, next) => {
+  if (!req?.user) return res.sendStatus(403);
+  next();
+};
+
 export const validate = (req, res, next) => {
   const r = validationResult(req);
   if (r.isEmpty()) return next();
@@ -17,5 +22,6 @@ export const validate = (req, res, next) => {
 };
 
 export default {
+  isPrivileged,
   validate,
 };
