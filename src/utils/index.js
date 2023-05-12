@@ -1,1 +1,5 @@
-export { default as firestore } from './firestore/index.js';
+const firestore = require('./firestore');
+
+module.exports = {
+    firestore,
+};

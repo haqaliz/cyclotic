@@ -1,11 +1,13 @@
-import { validationResult } from 'express-validator';
+const expressValidator = require('express-validator');
 
-export const isPrivileged = (req, res, next) => {
+const { validationResult } = expressValidator;
+
+const isPrivileged = (req, res, next) => {
   if (!req?.user) return res.sendStatus(403);
   next();
 };
 
-export const validate = (req, res, next) => {
+const validate = (req, res, next) => {
   const r = validationResult(req);
   if (r.isEmpty()) return next();
   let errors = {};
@@ -21,7 +23,7 @@ export const validate = (req, res, next) => {
   });
 };
 
-export default {
+module.exports = {
   isPrivileged,
   validate,
 };

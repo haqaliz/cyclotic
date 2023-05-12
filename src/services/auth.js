@@ -1,11 +1,13 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { firebase } from '../config.js';
+const auth = require('firebase/auth');
+const { firebase } = require('../config');
 
-export const signup = async (email, password) => {
+const {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+} = auth;
+
+const signup = async (email, password) => {
     const r = await createUserWithEmailAndPassword(
         firebase.auth,
         email,
@@ -15,7 +17,7 @@ export const signup = async (email, password) => {
     return r.user;
 };
 
-export const login = async (email, password) => {
+const login = async (email, password) => {
     const r = await signInWithEmailAndPassword(
         firebase.auth,
         email,password,
@@ -24,14 +26,14 @@ export const login = async (email, password) => {
     return r;
 };
 
-export const logout = async () => {
+const logout = async () => {
     const r = await signOut(
         firebase.auth,
     ).catch((e) => e);
     return !r?.code;
 };
 
-export default {
+module.exports = {
     signup,
     login,
     logout,

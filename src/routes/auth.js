@@ -1,6 +1,10 @@
-import express from 'express';
-import { auth as authController } from '../controllers/index.js';
-import { auth as authValidator, utils } from '../validators/index.js';
+const express = require('express');
+const controllers = require('../controllers');
+const validators = require('../validators');
+
+const authController = controllers.auth;
+const authValidator = validators.auth;
+const { utils } = validators;
 
 const router = express.Router();
 
@@ -21,4 +25,4 @@ router.post(
   authController.logout,
 );
 
-export default router;
+module.exports = router;

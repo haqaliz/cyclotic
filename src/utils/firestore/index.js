@@ -1,7 +1,5 @@
-import recordedDay from './recorded_day.js';
+const RECORDED_DAY = require('./recorded-day');
 
-export const RECORDED_DAY = recordedDay;
-
-export default {
+module.exports = {
   RECORDED_DAY,
 };

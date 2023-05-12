@@ -1,12 +1,13 @@
-import { recordedDays as recordedDaysService } from '../services/index.js';
+const services = require('../services');
+const recordedDaysService = services.recordedDays;
 
-export const getRecordedDaysForUser = async (req, res) => {
+const getRecordedDaysForUser = async (req, res) => {
     const r = await recordedDaysService
       .getRecordedDaysForUser(req.params.id);
     return res.send(r);
 };
 
-export const addRecordedDayForUser = async (req, res) => {
+const addRecordedDayForUser = async (req, res) => {
   const context = {
     user_id: req.params.id,
     feelings: req.body.feelings,
@@ -26,7 +27,7 @@ export const addRecordedDayForUser = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export const updateRecordedDayForUser = async (req, res) => {
+const updateRecordedDayForUser = async (req, res) => {
   const recordedDayId = req.params.recorded_day_id;
   const context = {
     user_id: req.params.id,
@@ -47,7 +48,7 @@ export const updateRecordedDayForUser = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export const deleteRecordedDayForUser = async (req, res) => {
+const deleteRecordedDayForUser = async (req, res) => {
   const context = {
     user_id: req.params.id,
     recorded_day_id: req.params.recorded_day_id,
@@ -58,7 +59,7 @@ export const deleteRecordedDayForUser = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export default {
+module.exports = {
   getRecordedDaysForUser,
   addRecordedDayForUser,
   updateRecordedDayForUser,

@@ -1,8 +1,9 @@
-import { param, body } from 'express-validator';
-import { firestore as firestoreUtils } from '../utils/index.js';
+const expressValidator = require('express-validator');
+const utils = require('../utils');
 
+const { param, body } = expressValidator;
+const firestoreUtils = utils.firestore;
 const { RECORDED_DAY } = firestoreUtils;
-
 const INTENSITY_THRESHOLD = { DOWN: 0, UP: 10 };
 
 const isValidFeelings = (v) => {
@@ -110,7 +111,7 @@ const isValidSexSituation = (v) => {
   return true;
 };
 
-export const addRecordedDayForUser = [
+const addRecordedDayForUser = [
   param('id')
     .trim()
     .notEmpty(),
@@ -151,7 +152,7 @@ export const addRecordedDayForUser = [
     .notEmpty()
 ];
 
-export const updateRecordedDayForUser = [
+const updateRecordedDayForUser = [
   param('id')
     .trim()
     .notEmpty(),
@@ -195,7 +196,7 @@ export const updateRecordedDayForUser = [
     .notEmpty()
 ];
 
-export const deleteRecordedDayForUser = [
+const deleteRecordedDayForUser = [
   param('id')
     .trim()
     .notEmpty(),
@@ -204,7 +205,7 @@ export const deleteRecordedDayForUser = [
     .notEmpty(),
 ];
 
-export default {
+module.exports = {
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,

@@ -1,4 +1,4 @@
-export const FEELINGS = [
+const FEELINGS = [
   'calm',
   'happy',
   'energetic',
@@ -15,7 +15,7 @@ export const FEELINGS = [
   'very self-critical',
 ];
 
-export const SYMPTOMS = [
+const SYMPTOMS = [
   'bloating',
   'cramps',
   'tender breasts',
@@ -31,7 +31,7 @@ export const SYMPTOMS = [
   'diarrhea',
 ];
 
-export const VAGINAL_DISCHARGE = [
+const VAGINAL_DISCHARGE = [
   'creamy',
   'watery',
   'sticky',
@@ -40,7 +40,7 @@ export const VAGINAL_DISCHARGE = [
   'unusual',
 ];
 
-export const MISC = [
+const MISC = [
   'travel',
   'stress',
   'disease or injury',
@@ -54,30 +54,30 @@ export const MISC = [
   'cycling',
 ];
 
-export const BLEEDING_TYPE = [
+const BLEEDING_TYPE = [
   'clots',
   'watery flow',
 ];
 
-export const BLOOD_COLOR = [
+const BLOOD_COLOR = [
   'dark brown',
   'bright red',
 ];
 
-export const PREGNANCY_TEST = [
+const PREGNANCY_TEST = [
   'negative',
   'positive',
   'faint line',
 ];
 
-export const SEX_SITUATION = [
+const SEX_SITUATION = [
   'unprotected sex',
   'protected sex',
   'masturbation',
   'high sex drive',
 ];
 
-export default {
+module.exports = {
   FEELINGS,
   SYMPTOMS,
   VAGINAL_DISCHARGE,

@@ -1,6 +1,10 @@
-import express from 'express';
-import { users as usersController } from '../controllers/index.js';
-import { users as usersValidator, utils } from '../validators/index.js';
+const express = require('express');
+const controllers = require('../controllers');
+const validators = require('../validators');
+
+const usersController = controllers.users;
+const usersValidator = validators.users;
+const { utils } = validators;
 
 const router = express.Router();
 
@@ -36,4 +40,4 @@ router.get(
   usersController.getRecordedDaysForUser,
 );
 
-export default router;
+module.exports = router;

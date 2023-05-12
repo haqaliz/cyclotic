@@ -1,4 +1,8 @@
-import {
+const firestore = require('firebase/firestore');
+const dateFns = require('date-fns');
+const { firebase } = require('../config');
+
+const {
   collection,
   query,
   where,
@@ -9,11 +13,10 @@ import {
   doc,
   setDoc,
   deleteDoc,
-} from "firebase/firestore";
-import { firebase } from '../config.js';
-import { startOfToday, endOfToday } from 'date-fns';
+} = firestore;
+const { startOfToday, endOfToday } = dateFns;
 
-export const getRecordedDaysForUser = async (userId) => {
+const getRecordedDaysForUser = async (userId) => {
     const q = query(
       collection(
         firebase.db,
@@ -27,7 +30,7 @@ export const getRecordedDaysForUser = async (userId) => {
     return res;
 };
 
-export const addRecordedDayForUser = async (context) => {
+const addRecordedDayForUser = async (context) => {
   const q = query(
     collection(
       firebase.db,
@@ -54,7 +57,7 @@ export const addRecordedDayForUser = async (context) => {
   return ref;
 };
 
-export const updateRecordedDayForUser = async (recordedDayId, context) => {
+const updateRecordedDayForUser = async (recordedDayId, context) => {
   const ref = doc(firebase.db, 'recorded_days', recordedDayId);
   const snapshot = await getDoc(ref);
   if (!snapshot.exists()) return;
@@ -67,13 +70,13 @@ export const updateRecordedDayForUser = async (recordedDayId, context) => {
   return ref;
 };
 
-export const deleteRecordedDayForUser = async (context) => {
+const deleteRecordedDayForUser = async (context) => {
   const ref = doc(firebase.db, 'recorded_days', context.recorded_day_id);
   await deleteDoc(ref);
   return ref;
 };
 
-export default {
+module.exports = {
   getRecordedDaysForUser,
   addRecordedDayForUser,
   updateRecordedDayForUser,

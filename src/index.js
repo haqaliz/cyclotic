@@ -1,3 +1,3 @@
-import routes from './routes/index.js';
+const routes = require('./routes');
 
 routes.init();

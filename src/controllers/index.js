@@ -1,2 +1,7 @@
-export { default as auth } from './auth.js';
-export { default as users } from './users.js';
+const auth  = require('./auth');
+const users = require('./users');
+
+module.exports = {
+    auth,
+    users,
+};

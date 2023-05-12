@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import { firebase } from '../config.js';
-import authRouter from './auth.js';
-import usersRouter from './users.js';
+const express = require('express');
+const bodyParser = require('body-parser');
+const { firebase } = require('../config');
+const authRouter = require('./auth');
+const usersRouter = require('./users');
 
 const init = () => {
   const app = express();
@@ -26,6 +26,6 @@ const init = () => {
   });
 };
 
-export default {
+module.exports = {
   init,
 };

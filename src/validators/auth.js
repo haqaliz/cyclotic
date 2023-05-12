@@ -1,6 +1,8 @@
-import { body } from 'express-validator';
+const expressValidator = require('express-validator');
 
-export const login = [
+const { body } = expressValidator;
+
+const login = [
   body('email')
     .trim()
     .notEmpty()
@@ -8,7 +10,7 @@ export const login = [
   body('password').notEmpty(),
 ];
 
-export const signup = [
+const signup = [
   body('email')
     .trim()
     .notEmpty()
@@ -16,7 +18,7 @@ export const signup = [
   body('password').notEmpty(),
 ];
 
-export default {
+module.exports = {
   login,
   signup,
 };

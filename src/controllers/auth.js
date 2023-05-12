@@ -1,6 +1,7 @@
-import { auth as authService } from '../services/index.js';
+const services = require('../services');
+const authService = services.auth;
 
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
     const r = await authService.signup(
         req.body.email,
         req.body.password,
@@ -9,7 +10,7 @@ export const signup = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
     const r = await authService.login(
         req.body.email,
         req.body.password,
@@ -18,13 +19,13 @@ export const login = async (req, res) => {
     return res.sendStatus(200);
 };
 
-export const logout = async (req, res) => {
+const logout = async (req, res) => {
     const r = await authService.logout();
     if (!r) return res.status(400).send("Couldn't logout");
     return res.sendStatus(200);
 };
 
-export default {
+module.exports = {
     signup,
     login,
     logout,
