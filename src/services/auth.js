@@ -20,7 +20,8 @@ const signup = async (email, password) => {
 const login = async (email, password) => {
     const r = await signInWithEmailAndPassword(
         firebase.auth,
-        email,password,
+        email,
+        password,
     ).catch((e) => e);
     if (r?.code) return;
     return r;
@@ -30,7 +31,8 @@ const logout = async () => {
     const r = await signOut(
         firebase.auth,
     ).catch((e) => e);
-    return !r?.code;
+    if (r === undefined) return true;
+    return r.code;
 };
 
 module.exports = {
