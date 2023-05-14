@@ -6,7 +6,7 @@ const usersRouter = require('./users');
 
 const init = () => {
   const app = express();
-  const port = 3000;
+  const port = 8081;
 
   app.use(bodyParser.urlencoded({
     extended: true
