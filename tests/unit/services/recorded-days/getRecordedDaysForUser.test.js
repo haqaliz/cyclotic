@@ -7,11 +7,11 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test('getRecordedDaysForUser return result if exist', async () => {
+test('if find result return snapshot array', async () => {
   // Arrange
   const userId = "3PejNdc8yY8awjmR7bbj";
   const getDocsResult = [{
-    data: () => ({
+    data: jest.fn(() => ({
         "bleeding_type": "clots",
         "blood_color": "bright red",
         "sex_situation": "protected sex",
@@ -47,7 +47,7 @@ test('getRecordedDaysForUser return result if exist', async () => {
                 "intensity": 3
             }
         ]
-    })
+    })),
   }];
   firestore.getDocs.mockResolvedValue(getDocsResult);
 
@@ -56,4 +56,17 @@ test('getRecordedDaysForUser return result if exist', async () => {
 
   // Assert
   r.forEach((i) => expect(i?.user_id).toBe(userId));
+});
+
+test('if couldn\'t find result return empty array', async () => {
+    // Arrange
+    const userId = "3PejNdc8yY8awjmR7bbj";
+    const getDocsResult = [];
+    firestore.getDocs.mockResolvedValue(getDocsResult);
+  
+    // Act
+    const r = await rdService.getRecordedDaysForUser(userId);
+  
+    // Assert
+    expect(r.length).toBe(0);
 });

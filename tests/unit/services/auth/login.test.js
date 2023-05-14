@@ -7,7 +7,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test('login done successfully', async () => {
+test('if we pass email and password return user', async () => {
   // Arrange
   const uid = 'UNIQUE_UID';
   const context = {
@@ -26,7 +26,7 @@ test('login done successfully', async () => {
   expect(r?.uid).toBe(uid);
 });
 
-test('login failed', async () => {
+test('if we don\'t pass password return undefined', async () => {
   // Arrange
   const code = 'ERROR_CODE';
   const context = {

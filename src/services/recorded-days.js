@@ -61,7 +61,8 @@ const updateRecordedDayForUser = async (recordedDayId, context) => {
   const ref = doc(firebase.db, 'recorded_days', recordedDayId);
   const snapshot = await getDoc(ref);
   if (!snapshot.exists()) return;
-  const recordedDay = snapshot.data();
+  // you can use the snapshot using data method
+  // const recordedDay = snapshot.data();
   await setDoc(ref, {
     ...context,
     created_at: startOfToday(),
