@@ -3,7 +3,7 @@ const recordedDaysService = services.recordedDays;
 
 const getRecordedDaysForUser = async (req, res) => {
     const r = await recordedDaysService
-      .getRecordedDaysForUser(req.params.id);
+      .getRecordedDaysForUser(req.params.id, req.query.from, req.query.to);
     return res.send(r);
 };
 

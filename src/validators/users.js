@@ -1,7 +1,7 @@
 const expressValidator = require('express-validator');
 const utils = require('../utils');
 
-const { param, body } = expressValidator;
+const { param, body, query } = expressValidator;
 const firestoreUtils = utils.firestore;
 const { RECORDED_DAY } = firestoreUtils;
 const INTENSITY_THRESHOLD = { DOWN: 0, UP: 10 };
@@ -111,6 +111,10 @@ const isValidSexSituation = (v) => {
   return true;
 };
 
+const sanitizeUnixEpoch = (v) => {
+  return new Date(parseFloat(v, 10) * 1000);
+};
+
 const addRecordedDayForUser = [
   param('id')
     .trim()
@@ -205,8 +209,22 @@ const deleteRecordedDayForUser = [
     .notEmpty(),
 ];
 
+const getRecordedDayForUser = [
+  query('from')
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+];
+
 module.exports = {
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
+  getRecordedDayForUser,
 };

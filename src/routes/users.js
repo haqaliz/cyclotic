@@ -37,6 +37,8 @@ router.delete(
 // getting recording days for a user
 router.get(
   '/:id/recorded-days',
+  usersValidator.getRecordedDayForUser,
+  utils.validate,
   usersController.getRecordedDaysForUser,
 );
 

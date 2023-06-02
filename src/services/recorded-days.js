@@ -16,13 +16,17 @@ const {
 } = firestore;
 const { startOfToday, endOfToday } = dateFns;
 
-const getRecordedDaysForUser = async (userId) => {
+const getRecordedDaysForUser = async (userId, from, to) => {
     const q = query(
       collection(
         firebase.db,
         'recorded_days',
       ),
-      where('user_id', '==', userId),
+      and(
+        where('user_id', '==', userId),
+        where('created_at', '>=', from),
+        where('created_at', '<=', to),
+      ),
     );
     const snapshot = await getDocs(q);
     let res = [];
