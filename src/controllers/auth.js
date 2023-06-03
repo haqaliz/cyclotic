@@ -28,6 +28,7 @@ const logout = async (req, res) => {
 const user = async (req, res) => {
   if (!req?.user) return;
   return res.status(200).send({
+    id: req.user.uid,
     email: req.user.email,
   });
 };
