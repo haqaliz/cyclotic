@@ -30,7 +30,10 @@ const getRecordedDaysForUser = async (userId, from, to) => {
     );
     const snapshot = await getDocs(q);
     let res = [];
-    snapshot.forEach((i) => res.push(i.data()));
+    snapshot.forEach((i) => res.push({
+      id: i.id,
+      ...i.data(),
+    }));
     return res;
 };
 
