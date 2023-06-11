@@ -2,23 +2,40 @@ const services = require('../services');
 const recordedDaysService = services.recordedDays;
 
 const getRecordedDaysForUser = async (req, res) => {
-    const r = await recordedDaysService
-      .getRecordedDaysForUser(req.params.id, req.query.from, req.query.to);
-    return res.send(r);
+  const context = {
+    user_id: req.params.id,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await recordedDaysService.getRecordedDaysForUser(context);
+  return res.send(r);
+};
+
+const getLatestMenstrualCycleStartForUser = async (req, res) => {
+  const r = await recordedDaysService.getStartOfLastMenstrualCycleForUser(req.params.id);
+  return res.send(r);
 };
 
 const addRecordedDayForUser = async (req, res) => {
+  if (
+    [
+      'feelings', 'symptoms', 'vaginal_discharge',
+      'misc', 'bleeding_amount', 'bleeding_type',
+      'blood_color', 'pregnancy_test', 'sex_situation',
+    ].every((i) => !Object.keys(req.body).includes(i))
+  ) return res.sendStatus(400);
   const context = {
     user_id: req.params.id,
-    feelings: req.body.feelings,
-    symptoms: req.body.symptoms,
-    vaginal_discharge: req.body.vaginal_discharge,
-    misc: req.body.misc,
-    bleeding_amount: req.body.bleeding_amount,
-    bleeding_type: req.body.bleeding_type,
-    blood_color: req.body.blood_color,
-    pregnancy_test: req.body.pregnancy_test,
-    sex_situation: req.body.sex_situation,
+    created_at: req.body.date,
+    feelings: req.body?.feelings ?? null,
+    symptoms: req.body?.symptoms ?? null,
+    vaginal_discharge: req.body?.vaginal_discharge ?? null,
+    misc: req.body?.misc ?? null,
+    bleeding_amount: req.body?.bleeding_amount ?? null,
+    bleeding_type: req.body?.bleeding_type ?? null,
+    blood_color: req.body?.blood_color ?? null,
+    pregnancy_test: req.body?.pregnancy_test ?? null,
+    sex_situation: req.body?.sex_situation ?? null,
     medications: req.body?.medications ?? null,
   };
   const r = await recordedDaysService
@@ -28,18 +45,25 @@ const addRecordedDayForUser = async (req, res) => {
 };
 
 const updateRecordedDayForUser = async (req, res) => {
+  if (
+    [
+      'feelings', 'symptoms', 'vaginal_discharge',
+      'misc', 'bleeding_amount', 'bleeding_type',
+      'blood_color', 'pregnancy_test', 'sex_situation',
+    ].every((i) => !Object.keys(req.body).includes(i))
+  ) return res.sendStatus(400);
   const recordedDayId = req.params.recorded_day_id;
   const context = {
     user_id: req.params.id,
-    feelings: req.body.feelings,
-    symptoms: req.body.symptoms,
-    vaginal_discharge: req.body.vaginal_discharge,
-    misc: req.body.misc,
-    bleeding_amount: req.body.bleeding_amount,
-    bleeding_type: req.body.bleeding_type,
-    blood_color: req.body.blood_color,
-    pregnancy_test: req.body.pregnancy_test,
-    sex_situation: req.body.sex_situation,
+    feelings: req.body?.feelings ?? null,
+    symptoms: req.body?.symptoms ?? null,
+    vaginal_discharge: req.body?.vaginal_discharge ?? null,
+    misc: req.body?.misc ?? null,
+    bleeding_amount: req.body?.bleeding_amount ?? null,
+    bleeding_type: req.body?.bleeding_type ?? null,
+    blood_color: req.body?.blood_color ?? null,
+    pregnancy_test: req.body?.pregnancy_test ?? null,
+    sex_situation: req.body?.sex_situation ?? null,
     medications: req.body?.medications ?? null,
   };
   const r = await recordedDaysService
@@ -61,6 +85,7 @@ const deleteRecordedDayForUser = async (req, res) => {
 
 module.exports = {
   getRecordedDaysForUser,
+  getLatestMenstrualCycleStartForUser,
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,

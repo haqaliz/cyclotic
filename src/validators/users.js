@@ -1,5 +1,6 @@
 const expressValidator = require('express-validator');
 const utils = require('../utils');
+const { subMonths, startOfDay } = require('date-fns');
 
 const { param, body, query } = expressValidator;
 const firestoreUtils = utils.firestore;
@@ -111,6 +112,20 @@ const isValidSexSituation = (v) => {
   return true;
 };
 
+const isValidRecordedDate = (v) => {
+  if (Date.parse(v) === NaN) return false;
+  const d = new Date(v);
+  // can't submit date in future
+  if (d.getTime() > Date.now()) return false;
+  // can't submit date before 1 month ago
+  if (d.getTime() < startOfDay(subMonths(new Date(), 1)).getTime()) return false;
+  return true;
+};
+
+const sanitizeISOString = (v) => {
+  return new Date(v);
+};
+
 const sanitizeUnixEpoch = (v) => {
   return new Date(parseFloat(v, 10) * 1000);
 };
@@ -119,34 +134,47 @@ const addRecordedDayForUser = [
   param('id')
     .trim()
     .notEmpty(),
+  body('date')
+    .notEmpty()
+    .custom(isValidRecordedDate)
+    .customSanitizer(sanitizeISOString),
   body('feelings')
+    .optional()
     .isArray()
     .custom(isValidFeelings),
   body('symptoms')
+    .optional()
     .isArray()
     .custom(isValidSymptoms),
   body('vaginal_discharge')
+    .optional()
     .isArray()
     .custom(isValidVaginalDischarge),
   body('misc')
+    .optional()
     .isArray()
     .custom(isValidMisc),
   body('bleeding_amount')
+    .optional()
     .notEmpty()
     .custom(isValidBleedingAmount),
   body('bleeding_type')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidBleedingType),
   body('blood_color')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidBloodColor),
   body('pregnancy_test')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidPregnancyTest),
   body('sex_situation')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidSexSituation),
@@ -161,36 +189,46 @@ const updateRecordedDayForUser = [
     .trim()
     .notEmpty(),
   param('recorded_day_id')
+    .optional()
     .trim()
     .notEmpty(),
   body('feelings')
+    .optional()
     .isArray()
     .custom(isValidFeelings),
   body('symptoms')
+    .optional()
     .isArray()
     .custom(isValidSymptoms),
   body('vaginal_discharge')
+    .optional()
     .isArray()
     .custom(isValidVaginalDischarge),
   body('misc')
+    .optional()
     .isArray()
     .custom(isValidMisc),
   body('bleeding_amount')
+    .optional()
     .notEmpty()
     .custom(isValidBleedingAmount),
   body('bleeding_type')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidBleedingType),
   body('blood_color')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidBloodColor),
   body('pregnancy_test')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidPregnancyTest),
   body('sex_situation')
+    .optional()
     .trim()
     .notEmpty()
     .custom(isValidSexSituation),
