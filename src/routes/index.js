@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { firebase } = require('../config');
 const authRouter = require('./auth');
-const usersRouter = require('./users');
+const userRouter = require('./user');
 
 const init = () => {
   const app = express();
@@ -19,7 +19,7 @@ const init = () => {
   });
 
   app.use('/auth', authRouter);
-  app.use('/users', usersRouter);
+  app.use('/user', userRouter);
 
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);

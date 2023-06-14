@@ -1,19 +1,12 @@
 const services = require('../services');
 const recordedDaysService = services.recordedDays;
 
-const getRecordedDaysForUser = async (req, res) => {
-  const context = {
-    user_id: req.params.id,
-    from: req.query.from,
-    to: req.query.to,
-  };
-  const r = await recordedDaysService.getRecordedDaysForUser(context);
-  return res.send(r);
-};
-
-const getLatestMenstrualCycleStartForUser = async (req, res) => {
-  const r = await recordedDaysService.getStartOfLastMenstrualCycleForUser(req.params.id);
-  return res.send(r);
+const info = async (req, res) => {
+  if (!req?.user) return;
+  return res.status(200).send({
+    id: req.user.uid,
+    email: req.user.email,
+  });
 };
 
 const addRecordedDayForUser = async (req, res) => {
@@ -25,7 +18,7 @@ const addRecordedDayForUser = async (req, res) => {
     ].every((i) => !Object.keys(req.body).includes(i))
   ) return res.sendStatus(400);
   const context = {
-    user_id: req.params.id,
+    user_id: req.user?.uid,
     created_at: req.body.date,
     feelings: req.body?.feelings ?? null,
     symptoms: req.body?.symptoms ?? null,
@@ -54,7 +47,7 @@ const updateRecordedDayForUser = async (req, res) => {
   ) return res.sendStatus(400);
   const recordedDayId = req.params.recorded_day_id;
   const context = {
-    user_id: req.params.id,
+    user_id: req.user?.uid,
     feelings: req.body?.feelings ?? null,
     symptoms: req.body?.symptoms ?? null,
     vaginal_discharge: req.body?.vaginal_discharge ?? null,
@@ -74,7 +67,7 @@ const updateRecordedDayForUser = async (req, res) => {
 
 const deleteRecordedDayForUser = async (req, res) => {
   const context = {
-    user_id: req.params.id,
+    user_id: req.user?.uid,
     recorded_day_id: req.params.recorded_day_id,
   };
   const r = await recordedDaysService
@@ -83,7 +76,23 @@ const deleteRecordedDayForUser = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const getRecordedDaysForUser = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await recordedDaysService.getRecordedDaysForUser(context);
+  return res.send(r);
+};
+
+const getLatestMenstrualCycleStartForUser = async (req, res) => {
+  const r = await recordedDaysService.getStartOfLastMenstrualCycleForUser(req.user?.uid);
+  return res.send(r);
+};
+
 module.exports = {
+  info,
   getRecordedDaysForUser,
   getLatestMenstrualCycleStartForUser,
   addRecordedDayForUser,

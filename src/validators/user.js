@@ -131,9 +131,6 @@ const sanitizeUnixEpoch = (v) => {
 };
 
 const addRecordedDayForUser = [
-  param('id')
-    .trim()
-    .notEmpty(),
   body('date')
     .notEmpty()
     .custom(isValidRecordedDate)
@@ -185,9 +182,6 @@ const addRecordedDayForUser = [
 ];
 
 const updateRecordedDayForUser = [
-  param('id')
-    .trim()
-    .notEmpty(),
   param('recorded_day_id')
     .optional()
     .trim()
@@ -239,9 +233,6 @@ const updateRecordedDayForUser = [
 ];
 
 const deleteRecordedDayForUser = [
-  param('id')
-    .trim()
-    .notEmpty(),
   param('recorded_day_id')
     .trim()
     .notEmpty(),

@@ -24,10 +24,5 @@ router.post(
   '/logout',
   authController.logout,
 );
-router.get(
-  '/user',
-  utils.isPrivileged,
-  authController.user,
-);
 
 module.exports = router;
