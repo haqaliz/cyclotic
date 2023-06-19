@@ -251,9 +251,23 @@ const getRecordedDayForUser = [
     .customSanitizer(sanitizeUnixEpoch),
 ];
 
+const getMenstrualCyclesForUser = [
+  query('from')
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+];
+
 module.exports = {
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
   getRecordedDayForUser,
+  getMenstrualCyclesForUser,
 };

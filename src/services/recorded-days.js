@@ -16,7 +16,7 @@ const {
   orderBy,
   limit,
 } = firestore;
-const { startOfDay, endOfDay, differenceInDays } = dateFns;
+const { startOfDay, endOfDay, differenceInDays, addDays } = dateFns;
 
 const getRecordedDaysForUser = async (context) => {
     const q = query(
@@ -114,10 +114,42 @@ const deleteRecordedDayForUser = async (context) => {
   return ref;
 };
 
+const getMenstrualCyclesForUser = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'recorded_days',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('created_at', '>=', context?.from),
+      where('created_at', '<=', context?.to),
+      where('is_start', '==', true),
+    ),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push(i.data()));
+  let MCs = [];
+  res.forEach((i, k) => {
+    if (!k) return;
+    const prev = res[k - 1];
+    const startOfMC = addDays(new Date(prev?.created_at?.seconds * 1000), 7);
+    const endOfMC = new Date(i?.created_at?.seconds * 1000);
+    MCs.push({
+      from: startOfMC.getTime() / 1000,
+      to: endOfMC.getTime() / 1000,
+      diff: differenceInDays(endOfMC, startOfMC),
+    });
+  });
+  return MCs;
+};
+
 module.exports = {
   getRecordedDaysForUser,
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
   getStartOfLastMenstrualCycleForUser,
+  getMenstrualCyclesForUser,
 };

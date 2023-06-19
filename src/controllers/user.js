@@ -91,6 +91,16 @@ const getLatestMenstrualCycleStartForUser = async (req, res) => {
   return res.send(r);
 };
 
+const getMenstrualCyclesForUser = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await recordedDaysService.getMenstrualCyclesForUser(context);
+  return res.send(r);
+};
+
 module.exports = {
   info,
   getRecordedDaysForUser,
@@ -98,4 +108,5 @@ module.exports = {
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
+  getMenstrualCyclesForUser,
 };

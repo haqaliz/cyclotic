@@ -51,8 +51,16 @@ router.get(
 
 // getting latest start of menstrual cycle recording day for a user
 router.get(
-  '/recorded-days/latest/start',
+  '/recorded-days/menstrual-cycles/latest/start',
   userController.getLatestMenstrualCycleStartForUser,
+);
+
+// getting all start of menstrual cycles between two dates for a user
+router.get(
+  '/recorded-days/menstrual-cycles',
+  userValidator.getMenstrualCyclesForUser,
+  utils.validate,
+  userController.getMenstrualCyclesForUser,
 );
 
 module.exports = router;
