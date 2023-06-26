@@ -83,7 +83,7 @@ const addRecordedDayForUser = async (context) => {
   // Minimum MC days
   const MMD = 20;
   const MCStarted = !startOfMC
-    || differenceInDays(context?.created_at, startOfMC?.created_at) < MMD;
+    || differenceInDays(context?.created_at, new Date(startOfMC?.created_at?.seconds * 1000)) > MMD;
   const ref = doc(collection(firebase.db, 'recorded_days'));
   await setDoc(ref, {
     ...context,
