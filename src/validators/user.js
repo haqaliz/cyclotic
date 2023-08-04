@@ -122,6 +122,22 @@ const isValidRecordedDate = (v) => {
   return true;
 };
 
+const isValidCard = (v) => {
+  if (
+    !v
+    || !v?.number
+    || !v?.exp_month
+    || !v?.exp_year
+    || !v?.cvc
+  ) throw new Error('card object contains number, exp_month, exp_year and cvc');
+  const cardNumber = v?.number?.toString();
+  if (!(/^\d{14,}$/.test(cardNumber))) throw new Error('card number must contains 14 digits at least');
+  if (v.exp_month < 1 || v.exp_month > 12) throw new Error('card exp_month must be between 1 to 12');
+  if (v.exp_year < new Date().getFullYear()) throw new Error('card exp_year must be in future');
+  if (!(/^\d{3,5}$/.test(v.cvc))) throw new Error('card cvc must contains 3 digits at least');
+  return true;
+};
+
 const sanitizeISOString = (v) => {
   return new Date(v);
 };
@@ -264,10 +280,23 @@ const getMenstrualCyclesForUser = [
     .customSanitizer(sanitizeUnixEpoch),
 ];
 
+const subscribeForPlan = [
+  body('card')
+    .notEmpty()
+    .custom(isValidCard),
+  body('product_id')
+    .trim()
+    .notEmpty(),
+  body('price_id')
+    .trim()
+    .notEmpty(),
+];
+
 module.exports = {
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
   getRecordedDayForUser,
   getMenstrualCyclesForUser,
+  subscribeForPlan,
 };

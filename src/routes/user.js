@@ -63,4 +63,12 @@ router.get(
   userController.getMenstrualCyclesForUser,
 );
 
+// subscribe to a plan for a user
+router.post(
+  '/subscribe',
+  userValidator.subscribeForPlan,
+  utils.validate,
+  userController.subscribeForPlan,
+);
+
 module.exports = router;

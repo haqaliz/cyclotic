@@ -1,5 +1,7 @@
 const services = require('../services');
 const recordedDaysService = services.recordedDays;
+const subscriptionsService = services.subscriptions;
+const stripeService = services.stripe;
 
 const info = async (req, res) => {
   if (!req?.user) return;
@@ -101,6 +103,26 @@ const getMenstrualCyclesForUser = async (req, res) => {
   return res.send(r);
 };
 
+const subscribeForPlan = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    email: req.user?.email,
+    card: req.body.card,
+    product_id: req.body.product_id,
+    price_id: req.body.price_id,
+  };
+  const r = await stripeService.subscribeForPlan(context);
+  if (!r) return res.status(400).send('Product does not exist');
+  const subscription = await subscriptionsService.addSubscriptionForUser({
+    user_id: req.user?.uid,
+    product_id: context.product_id,
+    price_id: context.price_id,
+    subscription_id: r.id,
+  });
+  if (!subscription) return res.status(400).send('You\'re already subscribed');
+  return res.sendStatus(200);
+};
+
 module.exports = {
   info,
   getRecordedDaysForUser,
@@ -109,4 +131,5 @@ module.exports = {
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
   getMenstrualCyclesForUser,
+  subscribeForPlan,
 };
