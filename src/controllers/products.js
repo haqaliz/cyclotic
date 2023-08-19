@@ -13,7 +13,6 @@ const getProductsList = async (req, res) => {
       price_id: i?.default_price?.id,
       price: i?.default_price?.unit_amount / 100,
       currency: i?.default_price?.currency,
-      color: i?.metadata?.color,
       features: i?.metadata?.features.split(','),
     });
     return a;

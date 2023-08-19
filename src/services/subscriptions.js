@@ -1,5 +1,6 @@
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
+const stripeService = require('./stripe');
 
 const {
   collection,
@@ -30,7 +31,12 @@ const getActiveSubscriptionForUser = async (context) => {
     ...i.data(),
   }));
   if (!res.length) return;
-  return res[0];
+  const subscription = res[0];
+  const product = await stripeService.getProduct(subscription);
+  return {
+    ...subscription,
+    key: product.name,
+  };
 };
 
 const addSubscriptionForUser = async (context) => {
