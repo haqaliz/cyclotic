@@ -133,7 +133,8 @@ const isValidCard = (v) => {
   const cardNumber = v?.number?.toString();
   if (!(/^\d{14,}$/.test(cardNumber))) throw new Error('card number must contains 14 digits at least');
   if (v.exp_month < 1 || v.exp_month > 12) throw new Error('card exp_month must be between 1 to 12');
-  if (v.exp_year < new Date().getFullYear()) throw new Error('card exp_year must be in future');
+  const currentYear = parseInt(new Date().getFullYear().toString().substr(2), 10);
+  if (v.exp_year < currentYear) throw new Error('card exp_year must be in future');
   if (!(/^\d{3,5}$/.test(v.cvc))) throw new Error('card cvc must contains 3 digits at least');
   return true;
 };

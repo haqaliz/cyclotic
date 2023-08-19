@@ -1,13 +1,18 @@
 const services = require('../services');
+const globals = require('../globals');
 const recordedDaysService = services.recordedDays;
 const subscriptionsService = services.subscriptions;
 const stripeService = services.stripe;
 
 const info = async (req, res) => {
   if (!req?.user) return;
+  const subscription = await subscriptionsService.getActiveSubscriptionForUser({
+    user_id: req.user.uid,
+  });
   return res.status(200).send({
     id: req.user.uid,
     email: req.user.email,
+    subscription,
   });
 };
 

@@ -9,7 +9,29 @@ const {
   getCountFromServer,
   doc,
   setDoc,
+  getDocs,
 } = firestore;
+
+const getActiveSubscriptionForUser = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'subscriptions',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('expired_at', '==', null),
+    ),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  if (!res.length) return;
+  return res[0];
+};
 
 const addSubscriptionForUser = async (context) => {
   const q = query(
@@ -38,6 +60,25 @@ const addSubscriptionForUser = async (context) => {
   return ref;
 };
 
+const getActiveSubscriptions = async () => {
+  const q = query(
+    collection(
+      firebase.db,
+      'subscriptions',
+    ),
+    where('expired_at', '==', null),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
 module.exports = {
+  getActiveSubscriptionForUser,
   addSubscriptionForUser,
+  getActiveSubscriptions,
 };
