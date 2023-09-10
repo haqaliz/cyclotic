@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors')
 const bodyParser = require('body-parser');
 const { firebase } = require('../config');
 const authRouter = require('./auth');
@@ -8,6 +9,8 @@ const productsRouter = require('./products');
 const init = () => {
   const app = express();
   const port = 8081;
+
+  app.use(cors());
 
   app.use(bodyParser.urlencoded({
     extended: true
