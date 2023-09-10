@@ -7,13 +7,13 @@ const { getAuth } = auth;
 const  { getFirestore } = firestore;
 
 const firebaseApp = initializeApp({
-    apiKey: "AIzaSyBPNCOqaqgIHo85oeEEf4fOH9RBNjhDuMA",
-    authDomain: "cyclotic-fc537.firebaseapp.com",
-    projectId: "cyclotic-fc537",
-    storageBucket: "cyclotic-fc537.appspot.com",
-    messagingSenderId: "497525688527",
-    appId: "1:497525688527:web:ae73e8ecd0bf9e3681cfba",
-    measurementId: "G-B6VP1G8FHY"
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 });
 const firebaseAuth = getAuth(firebaseApp);
 const firebaseStore = getFirestore(firebaseApp);
