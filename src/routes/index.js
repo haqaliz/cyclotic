@@ -1,4 +1,6 @@
+const https = require('https');
 const express = require('express');
+const fs = require('fs');
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const { firebase } = require('../config');
@@ -26,9 +28,14 @@ const init = () => {
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
 
-  app.listen(port, () => {
-    console.log(`app listening on port ${port}`);
-  });
+  const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert'),
+  };
+  https.createServer(options, app)
+    .listen(port, () => {
+      console.log(`app listening on port ${port}`);
+    });
 };
 
 module.exports = {

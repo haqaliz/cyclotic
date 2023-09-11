@@ -1,5 +1,10 @@
 # lock
 lock.*
+pnpm-locl.yaml
+
+# cert
+*.cert
+*.key
 
 # Logs
 logs
