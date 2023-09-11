@@ -28,14 +28,17 @@ const init = () => {
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
 
-  const options = {
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert'),
-  };
-  https.createServer(options, app)
-    .listen(port, () => {
-      console.log(`app listening on port ${port}`);
-    });
+  let server = app;
+  if (process.env.NODE_ENV === 'production') {
+    const options = {
+      key: fs.readFileSync('server.key'),
+      cert: fs.readFileSync('server.cert'),
+    };
+    server = https.createServer(options, app)
+  }
+  server.listen(port, () => {
+    console.log(`app listening on port ${port}`);
+  });
 };
 
 module.exports = {
