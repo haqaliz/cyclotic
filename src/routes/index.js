@@ -10,7 +10,7 @@ const productsRouter = require('./products');
 
 const init = () => {
   const app = express();
-  const port = 8081;
+  const port = process.env.NODE_ENV === 'production' ? 80 : 8081;
 
   app.use(cors());
 
