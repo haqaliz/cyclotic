@@ -26,6 +26,25 @@ const init = () => {
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
 
+  app.get('/test', async (req, res) => {
+    const nodemailer = require('nodemailer');
+    const transport = nodemailer.createTransport({
+      host: "mail.cyclo.dev",
+      port: 465,
+      auth: {
+        user: "noreply@cyclo.dev",
+        pass: "king_1374"
+      }
+    });
+    const mailOptions = {
+      to: 'aliz@foresightanalytics.com',
+      subject: 'heLLLLo',
+      html: '<strong style="background-color: red; padding: 1rem; border-radius: 5px;">Heyyyyy</strong>',
+    }
+    await transport.sendMail(mailOptions);
+    return res.sendStatus(200)
+  })
+
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);
   });
