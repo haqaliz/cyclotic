@@ -37,7 +37,7 @@ const init = () => {
       }
     });
     const mailOptions = {
-      to: 'aliz@foresightanalytics.com',
+      to: 'haqaliz@aol.com',
       subject: 'heLLLLo',
       html: '<strong style="background-color: red; padding: 1rem; border-radius: 5px;">Heyyyyy</strong>',
     }
