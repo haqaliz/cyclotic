@@ -31,6 +31,7 @@ const init = () => {
     const transport = nodemailer.createTransport({
       host: "mail.cyclo.dev",
       port: 465,
+      secure: true,
       auth: {
         user: "noreply@cyclo.dev",
         pass: "king_1374"
