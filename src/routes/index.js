@@ -27,22 +27,26 @@ const init = () => {
   app.use('/products', productsRouter);
 
   app.get('/test', async (req, res) => {
-    const nodemailer = require('nodemailer');
-    const transport = nodemailer.createTransport({
-      host: "mail.cyclo.dev",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "noreply@cyclo.dev",
-        pass: "king_1374"
+    try {
+      const nodemailer = require('nodemailer');
+      const transport = nodemailer.createTransport({
+        host: "mail.cyclo.dev",
+        port: 465,
+        secure: true,
+        auth: {
+          user: "noreply@cyclo.dev",
+          pass: "king_1374"
+        }
+      });
+      const mailOptions = {
+        to: 'haqaliz@aol.com',
+        subject: 'heLLLLo',
+        html: '<strong style="background-color: red; padding: 1rem; border-radius: 5px;">Heyyyyy</strong>',
       }
-    });
-    const mailOptions = {
-      to: 'haqaliz@aol.com',
-      subject: 'heLLLLo',
-      html: '<strong style="background-color: red; padding: 1rem; border-radius: 5px;">Heyyyyy</strong>',
+      await transport.sendMail(mailOptions);
+    } catch (e) {
+      console.log(e)
     }
-    await transport.sendMail(mailOptions);
     return res.sendStatus(200)
   })
 
