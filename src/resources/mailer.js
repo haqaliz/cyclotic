@@ -18,6 +18,7 @@ const send = (to, subject, content) => {
       subject,
       html: content,
     };
+    console.log('sending')
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         reject(error);

@@ -29,7 +29,7 @@ const init = () => {
 
   app.get('/test', async (req, res) => {
     try {
-      await resources.mailer.send('haqaliz@aol.com', 'hello', 'Yuck Fou')
+      resources.mailer.send('haqaliz@aol.com', 'hello', 'Yuck Fou')
     } catch (e) {
       console.log(e)
     }
