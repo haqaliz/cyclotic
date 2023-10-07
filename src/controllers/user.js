@@ -1,12 +1,10 @@
 const services = require('../services');
+const resources = require('../resources');
 const globals = require('../globals');
-const recordedDaysService = services.recordedDays;
-const subscriptionsService = services.subscriptions;
-const stripeService = services.stripe;
 
 const info = async (req, res) => {
   if (!req?.user) return;
-  const subscription = await subscriptionsService.getActiveSubscriptionForUser({
+  const subscription = await services.subscriptions.getActiveSubscriptionForUser({
     user_id: req.user.uid,
   });
   return res.status(200).send({
@@ -38,7 +36,7 @@ const addRecordedDayForUser = async (req, res) => {
     sex_situation: req.body?.sex_situation ?? null,
     medications: req.body?.medications ?? null,
   };
-  const r = await recordedDaysService
+  const r = await services.recordedDays
     .addRecordedDayForUser(context);
   if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
@@ -66,7 +64,7 @@ const updateRecordedDayForUser = async (req, res) => {
     sex_situation: req.body?.sex_situation ?? null,
     medications: req.body?.medications ?? null,
   };
-  const r = await recordedDaysService
+  const r = await services.recordedDays
     .updateRecordedDayForUser(recordedDayId, context);
   if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
@@ -77,7 +75,7 @@ const deleteRecordedDayForUser = async (req, res) => {
     user_id: req.user?.uid,
     recorded_day_id: req.params.recorded_day_id,
   };
-  const r = await recordedDaysService
+  const r = await services.recordedDays
     .deleteRecordedDayForUser(context);
   if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
@@ -89,12 +87,12 @@ const getRecordedDaysForUser = async (req, res) => {
     from: req.query.from,
     to: req.query.to,
   };
-  const r = await recordedDaysService.getRecordedDaysForUser(context);
+  const r = await services.recordedDays.getRecordedDaysForUser(context);
   return res.send(r);
 };
 
 const getLatestMenstrualCycleStartForUser = async (req, res) => {
-  const r = await recordedDaysService.getStartOfLastMenstrualCycleForUser(req.user?.uid);
+  const r = await services.recordedDays.getStartOfLastMenstrualCycleForUser(req.user?.uid);
   return res.send(r);
 };
 
@@ -104,7 +102,7 @@ const getMenstrualCyclesForUser = async (req, res) => {
     from: req.query.from,
     to: req.query.to,
   };
-  const r = await recordedDaysService.getMenstrualCyclesForUser(context);
+  const r = await services.recordedDays.getMenstrualCyclesForUser(context);
   return res.send(r);
 };
 
@@ -116,9 +114,9 @@ const subscribeForPlan = async (req, res) => {
     product_id: req.body.product_id,
     price_id: req.body.price_id,
   };
-  const r = await stripeService.subscribeForPlan(context);
+  const r = await resources.stripe.subscribeForPlan(context);
   if (!r) return res.status(400).send('Product does not exist');
-  const subscription = await subscriptionsService.addSubscriptionForUser({
+  const subscription = await services.subscriptions.addSubscriptionForUser({
     user_id: req.user?.uid,
     product_id: context.product_id,
     price_id: context.price_id,

@@ -1,10 +1,9 @@
 const services = require('../services');
+const resources = require('../resources');
 const dateFns = require('date-fns');
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 
-const subscriptionsService = services.subscriptions;
-const stripeService = services.stripe;
 const { differenceInMonths, differenceInYears } = dateFns;
 const {
   getDoc,
@@ -13,10 +12,10 @@ const {
 } = firestore;
 
 module.exports = async () => {
-    const activeSubscriptions = await subscriptionsService.getActiveSubscriptions();
+    const activeSubscriptions = await services.subscriptions.getActiveSubscriptions();
     for (const i of activeSubscriptions) {
         const createdAt = new Date(i.created_at?.seconds * 1000);
-        const product = await stripeService.getProduct({
+        const product = await resources.stripe.getProduct({
             product_id: i.product_id,
             price_id: i.price_id,
         });

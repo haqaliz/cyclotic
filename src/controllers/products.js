@@ -1,9 +1,8 @@
-const services = require('../services');
+const resources = require('../resources');
 const globals = require('../globals');
-const stripeService = services.stripe;
 
 const getProductsList = async (req, res) => {
-  if (!globals.products) globals.products = await stripeService.getProducts();
+  if (!globals.products) globals.products = await resources.stripe.getProducts();
   const r = globals.products.reduce((a, i) => {
     const [name, type] = i.name.split('_');
     if (!a[type]) a[type] = [];

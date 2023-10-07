@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const globals = require('./globals');
-const services = require('./services');
+const resources = require('./resources');
 const jobs = require('./jobs');
 const routes = require('./routes');
 
@@ -9,5 +9,5 @@ const routes = require('./routes');
     jobs.init();
     routes.init();
 
-    globals.products = await services.stripe.getProducts();
+    globals.products = await resources.stripe.getProducts();
 })()

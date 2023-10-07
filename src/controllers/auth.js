@@ -1,8 +1,7 @@
 const services = require('../services');
-const authService = services.auth;
 
 const signup = async (req, res) => {
-    const r = await authService.signup(
+    const r = await services.auth.signup(
         req.body.email,
         req.body.password,
     );
@@ -11,7 +10,7 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const r = await authService.login(
+    const r = await services.auth.login(
         req.body.email,
         req.body.password,
     );
@@ -20,7 +19,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    const r = await authService.logout();
+    const r = await services.auth.logout();
     if (!r) return res.status(400).send("Couldn't logout");
     return res.sendStatus(200);
 };

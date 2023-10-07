@@ -5,6 +5,7 @@ const { firebase } = require('../config');
 const authRouter = require('./auth');
 const userRouter = require('./user');
 const productsRouter = require('./products');
+const resources = require('../resources');
 
 const init = () => {
   const app = express();
@@ -28,22 +29,7 @@ const init = () => {
 
   app.get('/test', async (req, res) => {
     try {
-      const nodemailer = require('nodemailer');
-      const transport = nodemailer.createTransport({
-        host: "mail.cyclo.dev",
-        port: 465,
-        secure: true,
-        auth: {
-          user: "noreply@cyclo.dev",
-          pass: "king_1374"
-        }
-      });
-      const mailOptions = {
-        to: 'haqaliz@aol.com',
-        subject: 'heLLLLo',
-        html: '<strong style="background-color: red; padding: 1rem; border-radius: 5px;">Heyyyyy</strong>',
-      }
-      await transport.sendMail(mailOptions);
+      await resources.mailer.send('haqaliz@aol.com', 'hello', 'Yuck Fou')
     } catch (e) {
       console.log(e)
     }
