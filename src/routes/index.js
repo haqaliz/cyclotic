@@ -27,15 +27,6 @@ const init = () => {
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
 
-  app.get('/test', async (req, res) => {
-    try {
-      resources.mailer.send('haqaliz@aol.com', 'hello', 'Yuck Fou')
-    } catch (e) {
-      console.log(e)
-    }
-    return res.sendStatus(200)
-  })
-
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);
   });
