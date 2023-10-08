@@ -54,6 +54,7 @@ const upsertUserMetadata = async (context) => {
     const ref = doc(collection(firebase.db, 'users_metadata'));
     content = {
       user_id: context?.user_id,
+      email: context?.email,
       prefs: context?.prefs, 
       created_at: new Date(),
       updated_at: new Date(),
@@ -64,6 +65,7 @@ const upsertUserMetadata = async (context) => {
   const ref = doc(firebase.db, 'users_metadata', metadata?.id);
   content = {
     user_id: metadata?.user_id,
+    email: context?.email,
     prefs: {
       ...metadata?.prefs,
       ...context?.prefs,

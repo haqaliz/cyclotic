@@ -16,7 +16,7 @@ const {
   orderBy,
   limit,
 } = firestore;
-const { startOfDay, endOfDay, differenceInDays, addDays } = dateFns;
+const { startOfDay, endOfDay, differenceInDays, addDays, subDays } = dateFns;
 
 const getRecordedDaysForUser = async (context) => {
     const q = query(
@@ -145,6 +145,28 @@ const getMenstrualCyclesForUser = async (context) => {
   return MCs;
 };
 
+const getStartOfLastMenstrualCycleForAllUser = async () => {
+  const q = query(
+    collection(
+      firebase.db,
+      'recorded_days',
+    ),
+    and(
+      where('created_at', '>=', subDays(new Date(), 30)),
+      where('is_start', '==', true),
+    ),
+    orderBy('created_at', 'desc'),
+  );
+  // we need to add limit to this query
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
 module.exports = {
   getRecordedDaysForUser,
   addRecordedDayForUser,
@@ -152,4 +174,5 @@ module.exports = {
   deleteRecordedDayForUser,
   getStartOfLastMenstrualCycleForUser,
   getMenstrualCyclesForUser,
+  getStartOfLastMenstrualCycleForAllUser,
 };
