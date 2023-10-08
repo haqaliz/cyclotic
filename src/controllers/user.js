@@ -4,14 +4,34 @@ const globals = require('../globals');
 
 const info = async (req, res) => {
   if (!req?.user) return;
+  req.user.metadata = await services.user.getUserMetadata({
+    user_id: req.user.uid,
+  })
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
     user_id: req.user.uid,
   });
   return res.status(200).send({
     id: req.user.uid,
     email: req.user.email,
+    metadata: req.user.metadata,
     subscription,
   });
+};
+
+const updateInfo = async (req, res) => {
+  const context = {
+    user_id: req.user.uid,
+    email: req.body.email,
+    prefs: req.body.prefs,
+  };
+  if (context.email && req.user.email !== context.email) {
+    const user = await services.user.updateUserEmail(context);
+    if (user) req.user = user;
+  }
+  if (context.prefs) {
+    req.user.metadata = await services.user.upsertUserMetadata(context);
+  }
+  return res.sendStatus(200);
 };
 
 const addRecordedDayForUser = async (req, res) => {
@@ -128,6 +148,7 @@ const subscribeForPlan = async (req, res) => {
 
 module.exports = {
   info,
+  updateInfo,
   getRecordedDaysForUser,
   getLatestMenstrualCycleStartForUser,
   addRecordedDayForUser,

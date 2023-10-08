@@ -17,6 +17,15 @@ router.get(
   userController.info,
 );
 
+// update logged-in user information
+router.put(
+  '/info',
+  utils.isPrivileged,
+  userValidator.updateInfo,
+  utils.validate,
+  userController.updateInfo,
+);
+
 // adding recorded day for a user
 router.post(
   '/recorded-day',

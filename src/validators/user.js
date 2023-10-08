@@ -147,6 +147,39 @@ const sanitizeUnixEpoch = (v) => {
   return new Date(parseFloat(v, 10) * 1000);
 };
 
+const isValidPreferences = (v) => {
+  if (
+    !v
+    || !v?.notifications
+  ) throw new Error('prefs object contains notifications object');
+  if (
+    !Object.keys(v ?? {}).every(
+      (i) => ['notifications'].includes(i)
+    )
+  ) throw new Error('prefs object can only contains notifications');
+  const notifs = v?.notifications;
+  if (
+    !Object.keys(notifs ?? {}).every(
+      (i) => ['fertility_window', 'pms_symptoms', 'self_care'].includes(i)
+    )
+  ) throw new Error('notifications object can only contains fertitlity_window, pms_symptoms and self_care');
+  if (
+    typeof notifs?.fertility_window !== 'boolean'
+    && typeof notifs?.pms_symptoms !== 'boolean'
+    && typeof notifs?.self_care !== 'boolean'
+  ) throw new Error('notifications object values must be boolean');
+  return true;
+};
+
+const updateInfo = [
+  body('email')
+    .optional()
+    .isEmail(),
+  body('prefs')
+    .optional()
+    .custom(isValidPreferences),
+];
+
 const addRecordedDayForUser = [
   body('date')
     .notEmpty()
@@ -294,6 +327,7 @@ const subscribeForPlan = [
 ];
 
 module.exports = {
+  updateInfo,
   addRecordedDayForUser,
   updateRecordedDayForUser,
   deleteRecordedDayForUser,
