@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  main:
+    image: haqaliz/cyclotic:production
+    container_name: cyclotic_main
+    volumes:
+      - /root/cyclotic/.env:/app/.env:ro
+      - /root/cyclotic/logs:/app/logs
+    restart: always
+    ports:
+      - 8081:8081
