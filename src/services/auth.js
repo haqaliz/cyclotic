@@ -29,11 +29,14 @@ const login = async (email, password) => {
     return r;
 };
 
-const logout = async () => {
+const logout = async (user) => {
     const r = await signOut(
         firebase.auth,
     ).catch((e) => e);
-    if (r === undefined) return true;
+    if (r === undefined) {
+        delete globals.users[user.accessToken];
+        return true;
+    }
     return r.code;
 };
 

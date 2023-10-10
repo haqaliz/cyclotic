@@ -21,8 +21,9 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    const r = await services.auth.logout();
+    const r = await services.auth.logout(req.user);
     if (!r) return res.status(400).send("Couldn't logout");
+    req.user = null;
     return res.sendStatus(200);
 };
 
