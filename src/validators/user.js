@@ -160,13 +160,13 @@ const isValidPreferences = (v) => {
   const notifs = v?.notifications;
   if (
     !Object.keys(notifs ?? {}).every(
-      (i) => ['fertility_window', 'pms_symptoms', 'self_care'].includes(i)
+      (i) => ['fertility_window', 'pms_symptoms', 'self_care_tips'].includes(i)
     )
   ) throw new Error('notifications object can only contains fertitlity_window, pms_symptoms and self_care');
   if (
     typeof notifs?.fertility_window !== 'boolean'
     && typeof notifs?.pms_symptoms !== 'boolean'
-    && typeof notifs?.self_care !== 'boolean'
+    && typeof notifs?.self_care_tips !== 'boolean'
   ) throw new Error('notifications object values must be boolean');
   return true;
 };

@@ -3,7 +3,6 @@ const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 
 const {
-  getAuth,
   updateEmail,
   updatePassword,
 } = auth;
@@ -25,8 +24,6 @@ const {
 
 const updateUserEmail = async (context) => {
   await updateEmail(firebase.auth.currentUser, context.email);
-  firebase.auth = getAuth(firebase.app);
-  return firebase.auth.currentUser;
 };
 
 const getUserMetadata = async (context) => {
@@ -60,12 +57,12 @@ const upsertUserMetadata = async (context) => {
       updated_at: new Date(),
     };
     await setDoc(ref, content);
-    return ref;
+    return content;
   }
   const ref = doc(firebase.db, 'users_metadata', metadata?.id);
   content = {
     user_id: metadata?.user_id,
-    email: context?.email,
+    email: context?.email ? context?.email : metadata?.email,
     prefs: {
       ...metadata?.prefs,
       ...context?.prefs,

@@ -15,7 +15,9 @@ const login = async (req, res) => {
         req.body.password,
     );
     if (!r) return res.status(404).send('User Not found');
-    return res.sendStatus(200);
+    return res.status(200).send({
+        "token": r.user.accessToken,
+    });
 };
 
 const logout = async (req, res) => {

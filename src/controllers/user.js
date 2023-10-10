@@ -25,8 +25,11 @@ const updateInfo = async (req, res) => {
     prefs: req.body.prefs,
   };
   if (context.email && req.user.email !== context.email) {
-    const user = await services.user.updateUserEmail(context);
-    if (user) req.user = user;
+    await services.user.updateUserEmail(context);
+    if (user) {
+      req.user.email = context.email;
+      globals.users[req.user.accessToken] = req.user;
+    };
   }
   if (context.prefs) {
     req.user.metadata = await services.user.upsertUserMetadata(context);

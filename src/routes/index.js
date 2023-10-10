@@ -1,11 +1,10 @@
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser');
-const { firebase } = require('../config');
 const authRouter = require('./auth');
 const userRouter = require('./user');
 const productsRouter = require('./products');
-const resources = require('../resources');
+const globals = require('../globals');
 
 const init = () => {
   const app = express();
@@ -19,7 +18,10 @@ const init = () => {
   app.use(bodyParser.json());
 
   app.use((req, res, next) => {
-    req.user = firebase.auth.currentUser;
+    if (req.headers.authorization) {
+      const [_, token] = req.headers.authorization.split(' ');
+      req.user = globals.users[token];
+    }
     next();
   });
 
