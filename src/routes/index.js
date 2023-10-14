@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser');
+const miscRouter = require('./misc');
 const authRouter = require('./auth');
 const userRouter = require('./user');
 const productsRouter = require('./products');
@@ -25,6 +26,7 @@ const init = () => {
     next();
   });
 
+  app.use('/', miscRouter);
   app.use('/auth', authRouter);
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
