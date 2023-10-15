@@ -154,20 +154,34 @@ const isValidPreferences = (v) => {
   ) throw new Error('prefs object contains notifications object');
   if (
     !Object.keys(v ?? {}).every(
-      (i) => ['notifications'].includes(i)
+      (i) => ['notifications', 'menstruation_products'].includes(i)
     )
-  ) throw new Error('prefs object can only contains notifications');
-  const notifs = v?.notifications;
+  ) throw new Error('prefs object can only contains notifications and menstruation_products');
+  const N = v?.notifications;
   if (
-    !Object.keys(notifs ?? {}).every(
+    !Object.keys(N ?? {}).every(
       (i) => ['fertility_window', 'pms_symptoms', 'self_care_tips'].includes(i)
     )
   ) throw new Error('notifications object can only contains fertitlity_window, pms_symptoms and self_care');
   if (
-    typeof notifs?.fertility_window !== 'boolean'
-    && typeof notifs?.pms_symptoms !== 'boolean'
-    && typeof notifs?.self_care_tips !== 'boolean'
+    typeof N?.fertility_window !== 'boolean'
+    && typeof N?.pms_symptoms !== 'boolean'
+    && typeof N?.self_care_tips !== 'boolean'
   ) throw new Error('notifications object values must be boolean');
+  if (v?.menstruation_products) {
+    const MP = v?.menstruation_products;
+    if (
+      !Object.keys(MP ?? {}).every(
+        (i) => ['tampon', 'pad', 'cup', 'brands'].includes(i)
+      )
+    ) throw new Error('menstruation_products object can only contains tampon, pad, cup and brands');
+    if (
+      typeof MP?.tampon !== 'boolean'
+      && typeof MP?.pad !== 'boolean'
+      && typeof MP?.cup !== 'boolean'
+      && typeof MP?.brands !== 'object'
+    ) throw new Error('one of the menstruation_products object values types is wrong');
+  }
   return true;
 };
 
