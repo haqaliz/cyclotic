@@ -71,6 +71,14 @@ const upsertUserMetadata = async (context) => {
     updated_at: new Date(),
   };
   await setDoc(ref, content);
+  const uphRef = doc(firebase.db, 'users_preferences_history', metadata?.id);
+  content = {
+    user_id: metadata?.user_id,
+    ...metadata?.prefs,
+    ...context?.prefs,
+    created_at: metadata?.created_at,
+  };
+  await setDoc(uphRef, content);
   return content;
 };
 
