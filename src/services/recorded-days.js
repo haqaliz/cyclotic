@@ -1,6 +1,7 @@
 const firestore = require('firebase/firestore');
 const dateFns = require('date-fns');
 const { firebase } = require('../config');
+const _ = require('lodash');
 
 const {
   collection,
@@ -145,7 +146,7 @@ const getMenstrualCyclesForUser = async (context) => {
   return MCs;
 };
 
-const getStartOfLastMenstrualCycleForAllUser = async () => {
+const getStartOfLastMenstrualCycleForAllUsers = async () => {
   const q = query(
     collection(
       firebase.db,
@@ -167,6 +168,38 @@ const getStartOfLastMenstrualCycleForAllUser = async () => {
   return res;
 };
 
+const getBloodAmountForAllUsers = async (startDate, endDate) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'recorded_days',
+    ),
+    and(
+      where('created_at', '>=', startDate),
+      where('created_at', '<=', endDate),
+      where('bleeding_amount', 'in', _.range(1, 10)),
+    ),
+    orderBy('created_at', 'asc'),
+  );
+  // we need to add limit to this query
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res.reduce((a, i) => {
+    if (!(i.user_id in a)) a[i.user_id] = [];
+    a[i.user_id].push({
+      bleeding_amount: i?.bleeding_amount,
+      bleeding_type: i?.bleeding_type,
+      blood_color: i?.blood_color,
+      created_at: i.created_at,
+    });
+    return a;
+  }, {});
+};
+
 module.exports = {
   getRecordedDaysForUser,
   addRecordedDayForUser,
@@ -174,5 +207,6 @@ module.exports = {
   deleteRecordedDayForUser,
   getStartOfLastMenstrualCycleForUser,
   getMenstrualCyclesForUser,
-  getStartOfLastMenstrualCycleForAllUser,
+  getStartOfLastMenstrualCycleForAllUsers,
+  getBloodAmountForAllUsers,
 };

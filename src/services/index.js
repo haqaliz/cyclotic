@@ -2,6 +2,7 @@ const misc = require('./misc');
 const auth = require('./auth');
 const user = require('./user');
 const recordedDays = require('./recorded-days');
+const flowIntensityPattern = require('./flow-intensity-pattern');
 const subscriptions = require('./subscriptions');
 const notifications = require('./notifications');
 
@@ -10,6 +11,7 @@ module.exports = {
     auth,
     user,
     recordedDays,
+    flowIntensityPattern,
     subscriptions,
     notifications,
 };

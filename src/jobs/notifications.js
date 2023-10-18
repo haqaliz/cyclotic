@@ -11,7 +11,7 @@ const gapBetweenMCandFW = 4; // gap between end of menstrual cycle and start of 
 const FertileWindowLength = 6;
 
 module.exports = async () => {
-    const MCs = await services.recordedDays.getStartOfLastMenstrualCycleForAllUser();
+    const MCs = await services.recordedDays.getStartOfLastMenstrualCycleForAllUsers();
     const usersMetadata = await Promise.all(
         MCs.map((i) => services.user.getUserMetadata(i)),
     );
