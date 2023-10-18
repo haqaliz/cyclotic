@@ -1,6 +1,7 @@
 const auth = require('firebase/auth');
 const { firebase } = require('../config');
 const globals = require('../globals');
+const user = require('./user');
 
 const {
     createUserWithEmailAndPassword,
@@ -25,7 +26,13 @@ const login = async (email, password) => {
         password,
     ).catch((e) => e);
     if (r?.code) return;
-    globals.users[r.user.accessToken] = r.user;
+    const metadata = await user.getUserMetadata({
+        user_id: r.user.uid,
+    });
+    globals.users[r.user.accessToken] = {
+        ...r.user,
+        metadata,
+    };
     return r;
 };
 

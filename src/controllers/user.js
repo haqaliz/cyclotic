@@ -4,9 +4,6 @@ const globals = require('../globals');
 
 const info = async (req, res) => {
   if (!req?.user) return;
-  req.user.metadata = await services.user.getUserMetadata({
-    user_id: req.user.uid,
-  })
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
     user_id: req.user.uid,
   });
@@ -149,6 +146,11 @@ const subscribeForPlan = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const getAdvertisementsForUser = async (req, res) => {
+  const recommendations = await services.recommendations.getRecommendationsForUser(req.user);
+  return res.send(recommendations)
+};
+
 module.exports = {
   info,
   updateInfo,
@@ -159,4 +161,5 @@ module.exports = {
   deleteRecordedDayForUser,
   getMenstrualCyclesForUser,
   subscribeForPlan,
+  getAdvertisementsForUser,
 };

@@ -5,6 +5,7 @@ const recordedDays = require('./recorded-days');
 const flowIntensityPattern = require('./flow-intensity-pattern');
 const subscriptions = require('./subscriptions');
 const notifications = require('./notifications');
+const recommendations = require('./recommendations');
 
 module.exports = {
     misc,
@@ -14,4 +15,5 @@ module.exports = {
     flowIntensityPattern,
     subscriptions,
     notifications,
+    recommendations,
 };

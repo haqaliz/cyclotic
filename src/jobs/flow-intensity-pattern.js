@@ -3,13 +3,10 @@ const dateFns = require('date-fns');
 const { subDays, isLastDayOfMonth } = dateFns;
 
 module.exports = async () => {
-    const endedAt = new Date();
-    const startedAt = subDays(endedAt, 30);
-    if (!isLastDayOfMonth(endedAt)) return;
-    const bloodAmounts = await services.recordedDays.getBloodAmountForAllUsers(
-        startedAt,
-        endedAt,
-    );
+    const to = new Date();
+    const from = subDays(to, 30);
+    if (!isLastDayOfMonth(to)) return;
+    const bloodAmounts = await services.recordedDays.getBloodAmountForAllUsers(from, to);
     for (const userId in bloodAmounts) {
         const userMonthlyFlowIntensity = bloodAmounts[userId].reduce((a, i) => {
             const bleedingTypeCoeff = i.bleeding_type === 'watery flow'

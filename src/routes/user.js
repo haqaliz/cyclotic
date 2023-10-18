@@ -13,14 +13,12 @@ router.use(utils.isPrivileged);
 // logged-in user information
 router.get(
   '/info',
-  utils.isPrivileged,
   userController.info,
 );
 
 // update logged-in user information
 router.put(
   '/info',
-  utils.isPrivileged,
   userValidator.updateInfo,
   utils.validate,
   userController.updateInfo,
@@ -78,6 +76,12 @@ router.post(
   userValidator.subscribeForPlan,
   utils.validate,
   userController.subscribeForPlan,
+);
+
+// getting all ads for a user
+router.get(
+  '/ads',
+  userController.getAdvertisementsForUser,
 );
 
 module.exports = router;

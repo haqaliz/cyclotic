@@ -11,6 +11,7 @@ const {
   getCountFromServer,
   doc,
   setDoc,
+  getDocs,
 } = firestore;
 const { startOfMonth, endOfMonth } = dateFns;
 
@@ -40,6 +41,28 @@ const addFlowIntensityForUser = async (context) => {
   return ref;
 };
 
+const getFlowIntensityForUser = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'flow_intensity_pattern',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('created_at', '>=', context?.from),
+      where('created_at', '<=', context?.to),
+    ),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
 module.exports = {
   addFlowIntensityForUser,
+  getFlowIntensityForUser,
 };
