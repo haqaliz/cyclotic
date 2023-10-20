@@ -146,7 +146,7 @@ const subscribeForPlan = async (req, res) => {
   return res.sendStatus(200);
 };
 
-const getAdvertisementsForUser = async (req, res) => {
+const getRecommendationsForUser = async (req, res) => {
   const recommendations = await services.recommendations.getRecommendationsForUser(req.user);
   return res.send(recommendations)
 };
@@ -161,5 +161,5 @@ module.exports = {
   deleteRecordedDayForUser,
   getMenstrualCyclesForUser,
   subscribeForPlan,
-  getAdvertisementsForUser,
+  getRecommendationsForUser,
 };

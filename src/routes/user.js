@@ -80,8 +80,8 @@ router.post(
 
 // getting all ads for a user
 router.get(
-  '/ads',
-  userController.getAdvertisementsForUser,
+  '/recommendations',
+  userController.getRecommendationsForUser,
 );
 
 module.exports = router;
