@@ -1,6 +1,10 @@
 const expressValidator = require('express-validator');
 
-const { body } = expressValidator;
+const { body, query } = expressValidator;
+
+const sanitizeUnixEpoch = (v) => {
+  return new Date(parseFloat(v, 10) * 1000);
+};
 
 const contact = [
   body('name')
@@ -18,6 +22,52 @@ const contact = [
     .notEmpty(),
 ];
 
+const explore = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('limit')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric(),
+  query('query')
+    .optional()
+    .trim()
+    .notEmpty(),
+];
+
+const trends = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('limit')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric(),
+];
+
 module.exports = {
   contact,
+  explore,
+  trends,
 };

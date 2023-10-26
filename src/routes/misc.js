@@ -15,4 +15,18 @@ router.post(
   miscController.contact,
 );
 
+router.get(
+  '/explore',
+  miscValidator.explore,
+  utils.validate,
+  miscController.explore,
+);
+
+router.get(
+  '/trends',
+  miscValidator.trends,
+  utils.validate,
+  miscController.trends,
+);
+
 module.exports = router;

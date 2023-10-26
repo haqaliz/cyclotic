@@ -151,6 +151,42 @@ const getRecommendationsForUser = async (req, res) => {
   return res.send(recommendations)
 };
 
+const createPost = async (req, res) => {
+  const hashtags = (req.body.content.match(/\#[a-zA-Z0-9_]+/gi) ?? []).map((i) => i.replace(/\#+/g, ''));
+  const links = req.body.content.match(new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})', 'gi')) ?? [];
+  const context = {
+    user_id: req.user?.uid,
+    content: req.body.content,
+    hashtags,
+    links,
+  };
+  await services.user.createPostForUser(context);
+  return res.sendStatus(200);
+};
+
+const getPosts = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+    limit: req.query.limit || 100,
+    query: req.query.query,
+  };
+  const r = await services.user.getPostsForUser(context);
+  return res.send(r);
+};
+
+const deletePost = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    post_id: req.params.post_id,
+  };
+  const r = await services.user
+    .deletePostForUser(context);
+  if (!r) return res.sendStatus(400);
+  return res.sendStatus(200);
+};
+
 module.exports = {
   info,
   updateInfo,
@@ -162,4 +198,7 @@ module.exports = {
   getMenstrualCyclesForUser,
   subscribeForPlan,
   getRecommendationsForUser,
+  createPost,
+  getPosts,
+  deletePost,
 };

@@ -340,6 +340,41 @@ const subscribeForPlan = [
     .notEmpty(),
 ];
 
+const createPost = [
+  body('content')
+    .notEmpty()
+    .isLength({ min: 1, max: 144 }),
+];
+
+const getPosts = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('limit')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric(),
+  query('query')
+    .optional()
+    .trim()
+    .notEmpty(),
+];
+
+const deletePost = [
+  param('post_id')
+    .notEmpty(),
+];
+
 module.exports = {
   updateInfo,
   addRecordedDayForUser,
@@ -348,4 +383,7 @@ module.exports = {
   getRecordedDayForUser,
   getMenstrualCyclesForUser,
   subscribeForPlan,
+  createPost,
+  getPosts,
+  deletePost,
 };

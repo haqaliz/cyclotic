@@ -8,7 +8,7 @@ const { utils } = validators;
 
 const router = express.Router();
 
-router.use(utils.isPrivileged);
+// router.use(utils.isPrivileged);
 
 // logged-in user information
 router.get(
@@ -82,6 +82,30 @@ router.post(
 router.get(
   '/recommendations',
   userController.getRecommendationsForUser,
+);
+
+// create a post for a user
+router.post(
+  '/posts',
+  userValidator.createPost,
+  utils.validate,
+  userController.createPost,
+);
+
+// create a post for a user
+router.get(
+  '/posts',
+  userValidator.getPosts,
+  utils.validate,
+  userController.getPosts,
+);
+
+// create a post for a user
+router.delete(
+  '/posts/:post_id',
+  userValidator.deletePost,
+  utils.validate,
+  userController.deletePost,
 );
 
 module.exports = router;
