@@ -3,7 +3,7 @@ const resources = require('../resources');
 const globals = require('../globals');
 
 const info = async (req, res) => {
-  if (!req?.user) return;
+  if (!req?.user) return res.sendStatus(401);
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
     user_id: req.user.uid,
   });
@@ -22,11 +22,8 @@ const updateInfo = async (req, res) => {
     prefs: req.body.prefs,
   };
   if (context.email && req.user.email !== context.email) {
-    await services.user.updateUserEmail(context);
-    if (user) {
-      req.user.email = context.email;
-      globals.users[req.user.accessToken] = req.user;
-    };
+    req.user.email = context.email;
+    globals.users[req.user.accessToken].email = context.email;
   }
   if (context.prefs) {
     req.user.metadata = await services.user.upsertUserMetadata(context);

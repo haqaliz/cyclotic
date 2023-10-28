@@ -2,9 +2,9 @@ const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const miscRouter = require('./misc');
-const authRouter = require('./auth');
 const userRouter = require('./user');
 const productsRouter = require('./products');
+const services = require('../services');
 const globals = require('../globals');
 
 const init = () => {
@@ -18,16 +18,33 @@ const init = () => {
   }));
   app.use(bodyParser.json());
 
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
     if (req.headers.authorization) {
       const [_, token] = req.headers.authorization.split(' ');
-      req.user = globals.users[token];
+      try {
+        const user = await services.auth.verifyToken(token);
+        if (!(token in globals.users)) {
+          const metadata = await services.user.getUserMetadata({
+              user_id: user.user_id,
+          });
+          globals.users[token] = {
+              uid: user?.user_id,
+              email: user?.email,
+              email_verified: user?.email_verified,
+              metadata,
+              accessToken: token,
+          };
+        }
+        req.user = globals.users[token];
+      } catch (error) {
+        delete globals.users[token];
+        req.user = null;
+      }
     }
     next();
   });
 
   app.use('/', miscRouter);
-  app.use('/auth', authRouter);
   app.use('/user', userRouter);
   app.use('/products', productsRouter);
 

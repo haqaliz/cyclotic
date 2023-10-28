@@ -3,28 +3,18 @@ const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 
 const {
-  updateEmail,
-  updatePassword,
-} = auth;
-
-const {
   collection,
   query,
   where,
   and,
   getDocs,
   getDoc,
-  getCountFromServer,
   doc,
   setDoc,
   deleteDoc,
   orderBy,
   limit,
 } = firestore;
-
-const updateUserEmail = async (context) => {
-  await updateEmail(firebase.auth.currentUser, context.email);
-};
 
 const getUserMetadata = async (context) => {
   const q = query(
@@ -71,14 +61,14 @@ const upsertUserMetadata = async (context) => {
     updated_at: new Date(),
   };
   await setDoc(ref, content);
-  const uphRef = doc(firebase.db, 'users_preferences_history', metadata?.id);
-  content = {
+  const uphRef = doc(collection(firebase.db, 'users_preferences_history'));
+  let uphContent = {
     user_id: metadata?.user_id,
     ...metadata?.prefs,
     ...context?.prefs,
     created_at: metadata?.created_at,
   };
-  await setDoc(uphRef, content);
+  await setDoc(uphRef, uphContent);
   return content;
 };
 
@@ -158,7 +148,6 @@ const deletePostForUser = async (context) => {
 };
 
 module.exports = {
-  updateUserEmail,
   getUserMetadata,
   upsertUserMetadata,
   createPostForUser,

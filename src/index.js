@@ -6,7 +6,7 @@ const jobs = require('./jobs');
 const routes = require('./routes');
 
 (async () => {
-    jobs.init();
+    // jobs.init();
     routes.init();
 
     globals.products = await resources.stripe.getProducts();
