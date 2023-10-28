@@ -108,4 +108,12 @@ router.delete(
   userController.deletePost,
 );
 
+// create a post for a user
+router.get(
+  '/posts/:post_id',
+  userValidator.getPost,
+  utils.validate,
+  userController.getPost,
+);
+
 module.exports = router;

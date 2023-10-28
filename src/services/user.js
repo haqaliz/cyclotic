@@ -137,12 +137,20 @@ const getTrendsForUser = async (context) => {
   }));
 };
 
-const deletePostForUser = async (context) => {
+const getPostForUser = async (context) => {
   const ref = doc(firebase.db, 'posts', context.post_id);
   const snapshot = await getDoc(ref);
   if (!snapshot.exists()) return;
-  const post = snapshot.data();
-  if (post?.user_id !== context.user_id) return;
+  const post = {
+    id: snapshot.id,
+    ...snapshot.data(),
+  }; 
+  return post;
+};
+
+const deletePostForUser = async (context) => {
+  const post = await getPostForUser(context);
+  if (!post || post?.user_id !== context.user_id) return;
   await deleteDoc(ref);
   return ref;
 };
@@ -153,5 +161,6 @@ module.exports = {
   createPostForUser,
   getPostsForUser,
   getTrendsForUser,
+  getPostForUser,
   deletePostForUser,
 };

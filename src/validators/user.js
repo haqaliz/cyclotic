@@ -375,6 +375,11 @@ const deletePost = [
     .notEmpty(),
 ];
 
+const getPost = [
+  param('post_id')
+    .notEmpty(),
+];
+
 module.exports = {
   updateInfo,
   addRecordedDayForUser,
@@ -386,4 +391,5 @@ module.exports = {
   createPost,
   getPosts,
   deletePost,
+  getPost,
 };

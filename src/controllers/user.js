@@ -184,6 +184,17 @@ const deletePost = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const getPost = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    post_id: req.params.post_id,
+  };
+  const r = await services.user
+    .getPostForUser(context);
+  if (!r) return res.sendStatus(404);
+  return res.send(r);
+};
+
 module.exports = {
   info,
   updateInfo,
@@ -198,4 +209,5 @@ module.exports = {
   createPost,
   getPosts,
   deletePost,
+  getPost,
 };
