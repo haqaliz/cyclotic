@@ -116,4 +116,12 @@ router.get(
   userController.getPost,
 );
 
+// create a post for a user
+router.post(
+  '/posts/:post_id/like',
+  userValidator.likePost,
+  utils.validate,
+  userController.likePost,
+);
+
 module.exports = router;

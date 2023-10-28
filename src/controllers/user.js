@@ -195,6 +195,17 @@ const getPost = async (req, res) => {
   return res.send(r);
 };
 
+const likePost = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    post_id: req.params.post_id,
+  };
+  const r = await services.user
+    .likePostForUser(context);
+  if (!r) return res.sendStatus(404);
+  return res.sendStatus(200);
+};
+
 module.exports = {
   info,
   updateInfo,
@@ -210,4 +221,5 @@ module.exports = {
   getPosts,
   deletePost,
   getPost,
+  likePost,
 };

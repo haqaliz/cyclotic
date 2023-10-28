@@ -151,7 +151,26 @@ const getPostForUser = async (context) => {
 const deletePostForUser = async (context) => {
   const post = await getPostForUser(context);
   if (!post || post?.user_id !== context.user_id) return;
+  const ref = doc(firebase.db, 'posts', post.id);
   await deleteDoc(ref);
+  return ref;
+};
+
+const likePostForUser = async (context) => {
+  const post = await getPostForUser(context);
+  if (!post) return;
+  const ref = doc(firebase.db, 'posts', post?.id);
+  if (!post.likes) post.likes = {};
+  if (context.user_id in post.likes) {
+    delete post.likes[context.user_id];
+  } else {
+    post.likes[context.user_id] = new Date();
+  }
+  content = {
+    ...post,
+    likes: post.likes,
+  };
+  await setDoc(ref, content);
   return ref;
 };
 
@@ -163,4 +182,5 @@ module.exports = {
   getTrendsForUser,
   getPostForUser,
   deletePostForUser,
+  likePostForUser,
 };

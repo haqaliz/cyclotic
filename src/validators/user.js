@@ -380,6 +380,11 @@ const getPost = [
     .notEmpty(),
 ];
 
+const likePost = [
+  param('post_id')
+    .notEmpty(),
+];
+
 module.exports = {
   updateInfo,
   addRecordedDayForUser,
@@ -392,4 +397,5 @@ module.exports = {
   getPosts,
   deletePost,
   getPost,
+  likePost,
 };
