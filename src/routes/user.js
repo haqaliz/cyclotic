@@ -92,7 +92,7 @@ router.post(
   userController.createPost,
 );
 
-// create a post for a user
+// get posts for a user
 router.get(
   '/posts',
   userValidator.getPosts,
@@ -100,7 +100,7 @@ router.get(
   userController.getPosts,
 );
 
-// create a post for a user
+// delete a post for a user
 router.delete(
   '/posts/:post_id',
   userValidator.deletePost,
@@ -108,7 +108,7 @@ router.delete(
   userController.deletePost,
 );
 
-// create a post for a user
+// get a post for a user
 router.get(
   '/posts/:post_id',
   userValidator.getPost,
@@ -116,7 +116,7 @@ router.get(
   userController.getPost,
 );
 
-// create a post for a user
+// like a post for a user
 router.post(
   '/posts/:post_id/like',
   userValidator.likePost,

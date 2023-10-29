@@ -44,6 +44,10 @@ const explore = [
     .optional()
     .trim()
     .notEmpty(),
+  query('start_after')
+    .optional()
+    .trim()
+    .notEmpty(),
 ];
 
 const trends = [

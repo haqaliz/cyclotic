@@ -153,6 +153,7 @@ const createPost = async (req, res) => {
   const links = req.body.content.match(new RegExp('(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})', 'gi')) ?? [];
   const context = {
     user_id: req.user?.uid,
+    parent_id: req.body.parent_id,
     content: req.body.content,
     hashtags,
     links,
@@ -188,6 +189,7 @@ const getPost = async (req, res) => {
   const context = {
     user_id: req.user?.uid,
     post_id: req.params.post_id,
+    comments: req.query.comments,
   };
   const r = await services.user
     .getPostForUser(context);

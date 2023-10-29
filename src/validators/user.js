@@ -147,6 +147,10 @@ const sanitizeUnixEpoch = (v) => {
   return new Date(parseFloat(v, 10) * 1000);
 };
 
+const sanitizeBoolean = (v) => {
+  return /(t|yes|y|true|1)/i.test(v.toLowerCase());
+};
+
 const isValidPreferences = (v) => {
   if (
     !v
@@ -344,6 +348,10 @@ const createPost = [
   body('content')
     .notEmpty()
     .isLength({ min: 1, max: 144 }),
+  body('parent_id')
+    .optional()
+    .trim()
+    .notEmpty(),
 ];
 
 const getPosts = [
@@ -372,16 +380,23 @@ const getPosts = [
 
 const deletePost = [
   param('post_id')
+    .trim()
     .notEmpty(),
 ];
 
 const getPost = [
   param('post_id')
+    .trim()
     .notEmpty(),
+  query('comments')
+    .optional()
+    .customSanitizer(sanitizeBoolean)
+    .isBoolean(),
 ];
 
 const likePost = [
   param('post_id')
+    .trim()
     .notEmpty(),
 ];
 

@@ -1,6 +1,7 @@
 const auth = require('firebase/auth');
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
+const _ = require('lodash');
 
 const {
   collection,
@@ -14,6 +15,7 @@ const {
   deleteDoc,
   orderBy,
   limit,
+  startAfter,
 } = firestore;
 
 const getUserMetadata = async (context) => {
@@ -100,15 +102,25 @@ const getPostsForUser = async (context) => {
       where('hashtags', 'array-contains', context.query),
     );
   }
-  const q = query(
+  if (context.parent_id) {
+    criteria.push(
+      where('parent_id', '==', context.parent_id),
+    );
+  }
+  const queryChain = [
     collection(
       firebase.db,
       'posts',
     ),
     and(...criteria),
-    limit(context.limit),
     orderBy('created_at', 'desc'),
-  );
+  ];
+  if (context.start_after) {
+    const sstartAfterSnapshot = await getDoc(doc(firebase.db, 'posts', context.start_after));
+    queryChain.push(startAfter(sstartAfterSnapshot));
+  }
+  queryChain.push(limit(context.limit));
+  const q = query(...queryChain);
   const snapshot = await getDocs(q);
   let res = [];
   snapshot.forEach((i) => res.push({
@@ -119,7 +131,10 @@ const getPostsForUser = async (context) => {
 };
 
 const getTrendsForUser = async (context) => {
-  const res = await getPostsForUser(context);
+  const res = await getPostsForUser({
+    ...context,
+    limit: 1000, // latest 1000 posts
+  });
   const groupedRes = res.reduce((a, i) => {
     i.hashtags.forEach((hashtag) => {
       if (!(hashtag in a)) {
@@ -130,11 +145,15 @@ const getTrendsForUser = async (context) => {
     });
     return a;
   }, {});
-  return Object.keys(groupedRes).map((i) => ({
-    type: 'hashtag',
-    value: i,
-    count: groupedRes[i],
-  }));
+  return _.orderBy(
+    Object.keys(groupedRes).map((i) => ({
+      type: 'hashtag',
+      value: i,
+      count: groupedRes[i],
+    })),
+    (i) => i.count,
+    'desc',
+  ).slice(0, context.limit);
 };
 
 const getPostForUser = async (context) => {
@@ -144,7 +163,20 @@ const getPostForUser = async (context) => {
   const post = {
     id: snapshot.id,
     ...snapshot.data(),
-  }; 
+  };
+  if (context.comments) {
+    const comments = await getPostsForUser({
+      parent_id: post.id,
+    });
+    post.comments = comments;
+  }
+  if (!context?.depth && post.parent_id) {
+    const parent = await getPostForUser({
+      post_id: post.parent_id,
+      depth: 1,
+    });
+    post.parent = parent;
+  }
   return post;
 };
 
