@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker build --no-cache -t haqaliz/cyclotic:production .
+docker push haqaliz/cyclotic:production
+ssh root@195.248.241.217 './deploy'

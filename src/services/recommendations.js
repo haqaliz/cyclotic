@@ -23,16 +23,19 @@ const getMenstruationProductsRecommendations = async (context) => {
   const menstruationProductsBrands = Object.keys(prefs?.menstruation_products?.brands ?? {}).filter(
     (i) => prefs?.menstruation_products?.brands[i]
   );
-  const q = query(
+  const queryChain = [
     collection(
       firebase.db,
       'recommendations',
     ),
-    and(
+  ];
+  if (menstruationProductsBrands.length && menstruationProducts.length) {
+    queryChain.push(and(
       where('brand', 'in', menstruationProductsBrands),
       where('type', 'in', menstruationProducts),
-    ),
-  );
+    ));
+  }
+  const q = query(...queryChain);
   const snapshot = await getDocs(q);
   let MP = [];
   snapshot.forEach((i) => MP.push({
