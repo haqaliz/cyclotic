@@ -1,9 +1,6 @@
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser');
-const miscRouter = require('./misc');
-const userRouter = require('./user');
-const productsRouter = require('./products');
 const services = require('../services');
 const globals = require('../globals');
 
@@ -44,9 +41,10 @@ const init = () => {
     next();
   });
 
-  app.use('/', miscRouter);
-  app.use('/user', userRouter);
-  app.use('/products', productsRouter);
+  app.use('/', require('./misc'));
+  app.use('/user', require('./user'));
+  app.use('/products', require('./products'));
+  app.use('/challenges', require('./challenges'));
 
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);
