@@ -3,13 +3,13 @@ const verifyToken = async (idToken) => {
     const r = await fetch(process.env.GSERVICE_SECURE_TOKEN_API).catch((e) => e.response);
     if (!r?.ok) throw new Error('secured tokens couldn\'t fetch');
     const GST = await r.json();
-    try {
-        for (const i in GST) {
-            const secret = GST[i];
+    for (const i in GST) {
+        const secret = GST[i];
+        try {
             return jwt.verify(idToken, secret);
+        } catch (e) {
+            continue;
         }
-    } catch (e) {
-        // invalid signature
     }
 };
 
