@@ -6,12 +6,20 @@ const sanitizeBoolean = (v) => {
     return /(t|yes|y|true|1)/i.test(v.toLowerCase());
 };
 
-const explore = [
-    query('update')
-      .optional()
-        .customSanitizer(sanitizeBoolean)
-        .isBoolean(),
-  ];
+const getChallengesList = [
+  query('update')
+    .optional()
+      .customSanitizer(sanitizeBoolean)
+      .isBoolean(),
+];
+
+const getChallenge = [
+  param('challenge_id')
+    .trim()
+    .notEmpty(),
+];
 
 module.exports = {
+  getChallengesList,
+  getChallenge,
 };

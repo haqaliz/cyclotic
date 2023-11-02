@@ -8,12 +8,22 @@ const { utils } = validators;
 
 const router = express.Router();
 
-router.use(utils.isPrivileged);
+// router.use(utils.isPrivileged);
 
 // getting all challenges
 router.get(
   '/list',
+  challengesValidator.getChallengesList,
+  utils.validate,
   challengesController.getChallengesList,
+);
+
+// getting all challenges
+router.get(
+  '/:challenge_id',
+  challengesValidator.getChallenge,
+  utils.validate,
+  challengesController.getChallenge,
 );
 
 module.exports = router;

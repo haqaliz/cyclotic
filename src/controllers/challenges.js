@@ -12,6 +12,14 @@ const getChallengesList = async (req, res) => {
   return res.send(r);
 };
 
+const getChallenge = async (req, res) => {
+  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  const r = globals.challenges.find((i) => i.id === req.params.challenge_id);
+  return res.send(r);
+};
+
+
 module.exports = {
   getChallengesList,
+  getChallenge,
 };
