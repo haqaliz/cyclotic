@@ -2,6 +2,13 @@ const services = require('../services');
 const resources = require('../resources');
 const globals = require('../globals');
 
+const getToken = async (req, res) => {
+  if (!req?.user || !req.headers.authorization) return res.sendStatus(401);
+  const [_, token] = req.headers.authorization.split(' ');
+  const user = await services.auth.verifyToken(token);
+  return res.send(user)
+};
+
 const info = async (req, res) => {
   if (!req?.user) return res.sendStatus(401);
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
@@ -211,6 +218,7 @@ const likePost = async (req, res) => {
 };
 
 module.exports = {
+  getToken,
   info,
   updateInfo,
   getRecordedDaysForUser,

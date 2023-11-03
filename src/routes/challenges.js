@@ -8,7 +8,7 @@ const { utils } = validators;
 
 const router = express.Router();
 
-// router.use(utils.isPrivileged);
+router.use(utils.isPrivileged);
 
 // getting all challenges
 router.get(

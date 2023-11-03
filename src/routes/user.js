@@ -8,17 +8,23 @@ const { utils } = validators;
 
 const router = express.Router();
 
-// router.use(utils.isPrivileged);
+// logged-in user information
+router.get(
+  '/token',
+  userController.getToken,
+);
 
 // logged-in user information
 router.get(
   '/info',
+  utils.isPrivileged,
   userController.info,
 );
 
 // update logged-in user information
 router.put(
   '/info',
+  utils.isPrivileged,
   userValidator.updateInfo,
   utils.validate,
   userController.updateInfo,
@@ -27,6 +33,7 @@ router.put(
 // adding recorded day for a user
 router.post(
   '/recorded-day',
+  utils.isPrivileged,
   userValidator.addRecordedDayForUser,
   utils.validate,
   userController.addRecordedDayForUser,
@@ -35,6 +42,7 @@ router.post(
 // updating recorded day for a user
 router.put(
   '/recorded-day/:recorded_day_id',
+  utils.isPrivileged,
   userValidator.updateRecordedDayForUser,
   utils.validate,
   userController.updateRecordedDayForUser,
@@ -43,6 +51,7 @@ router.put(
 // deleting a recorded day for a user
 router.delete(
   '/recorded-day/:recorded_day_id',
+  utils.isPrivileged,
   userValidator.deleteRecordedDayForUser,
   utils.validate,
   userController.deleteRecordedDayForUser,
@@ -51,6 +60,7 @@ router.delete(
 // getting recording days for a user
 router.get(
   '/recorded-days',
+  utils.isPrivileged,
   userValidator.getRecordedDayForUser,
   utils.validate,
   userController.getRecordedDaysForUser,
@@ -59,12 +69,14 @@ router.get(
 // getting latest start of menstrual cycle recording day for a user
 router.get(
   '/recorded-days/menstrual-cycles/latest/start',
+  utils.isPrivileged,
   userController.getLatestMenstrualCycleStartForUser,
 );
 
 // getting all start of menstrual cycles between two dates for a user
 router.get(
   '/recorded-days/menstrual-cycles',
+  utils.isPrivileged,
   userValidator.getMenstrualCyclesForUser,
   utils.validate,
   userController.getMenstrualCyclesForUser,
@@ -73,6 +85,7 @@ router.get(
 // subscribe to a plan for a user
 router.post(
   '/subscribe',
+  utils.isPrivileged,
   userValidator.subscribeForPlan,
   utils.validate,
   userController.subscribeForPlan,
@@ -81,12 +94,14 @@ router.post(
 // getting all ads for a user
 router.get(
   '/recommendations',
+  utils.isPrivileged,
   userController.getRecommendationsForUser,
 );
 
 // create a post for a user
 router.post(
   '/posts',
+  utils.isPrivileged,
   userValidator.createPost,
   utils.validate,
   userController.createPost,
@@ -95,6 +110,7 @@ router.post(
 // get posts for a user
 router.get(
   '/posts',
+  utils.isPrivileged,
   userValidator.getPosts,
   utils.validate,
   userController.getPosts,
@@ -103,6 +119,7 @@ router.get(
 // delete a post for a user
 router.delete(
   '/posts/:post_id',
+  utils.isPrivileged,
   userValidator.deletePost,
   utils.validate,
   userController.deletePost,
@@ -111,6 +128,7 @@ router.delete(
 // get a post for a user
 router.get(
   '/posts/:post_id',
+  utils.isPrivileged,
   userValidator.getPost,
   utils.validate,
   userController.getPost,
@@ -119,6 +137,7 @@ router.get(
 // like a post for a user
 router.post(
   '/posts/:post_id/like',
+  utils.isPrivileged,
   userValidator.likePost,
   utils.validate,
   userController.likePost,
