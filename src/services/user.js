@@ -206,6 +206,76 @@ const likePostForUser = async (context) => {
   return ref;
 };
 
+const getUserChallenges = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'users_challenges',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('completed', '==', false),
+    ),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
+const getUserChallenge = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'users_challenges',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('challenge_id', '==', context?.challenge_id),
+      where('completed', '==', false),
+    ),
+    limit(1),
+  );
+  const snapshot = await getDocs(q);
+  const challenge = snapshot.docs[0]
+      && {
+        id: snapshot.docs[0].id,
+        ...snapshot.docs[0]?.data(),
+      };
+  return challenge;
+};
+
+const createUserChallenge = async (context) => {
+  let challenge = await getUserChallenge(context);
+  let content;
+  if (!challenge) {
+    const ref = doc(collection(firebase.db, 'users_challenges'));
+    content = {
+      user_id: context?.user_id,
+      challenge_id: context?.challenge_id,
+      created_at: new Date(),
+      updated_at: new Date(),
+      completed: false,
+    };
+    await setDoc(ref, content);
+    return {
+      id: ref.id,
+      ...content,
+    };
+  }
+  return challenge;
+};
+
+const deleteUserChallenge = async (context) => {
+  const challenge = await getUserChallenge(context);
+  const ref = doc(firebase.db, 'users_challenges', challenge.id);
+  await deleteDoc(ref);
+  return ref;
+};
+
 module.exports = {
   getUserMetadata,
   upsertUserMetadata,
@@ -215,4 +285,8 @@ module.exports = {
   getPostForUser,
   deletePostForUser,
   likePostForUser,
+  getUserChallenges,
+  getUserChallenge,
+  createUserChallenge,
+  deleteUserChallenge,
 };

@@ -55,13 +55,14 @@ const getRecommendationsForUser = async (context) => {
   });
   const MP = await getMenstruationProductsRecommendations(context);
   const flowIntensity = flowIntensityOverMonth?.[0]?.flow_intensity ?? 0;
+  const smartMP = MP.filter((i) => {
+    if (flowIntensity < 5.5) return i.type === 'pad';
+    if (flowIntensity >= 5.5 && flowIntensity < 8) return i.type === 'tampon';
+    // flowIntensity >= 8
+    return i.type === 'cup';
+  });
   return {
-    menstruation_products: MP.filter((i) => {
-      if (flowIntensity < 5.5) return i.type === 'pad';
-      if (flowIntensity >= 5.5 && flowIntensity < 8) return i.type === 'tampon';
-      // flowIntensity >= 8
-      return i.type === 'cup';
-    }),
+    menstruation_products: smartMP.length > 0 ? smartMP : MP,
   };
 };
 

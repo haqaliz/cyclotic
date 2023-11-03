@@ -19,7 +19,21 @@ const getChallenge = [
     .notEmpty(),
 ];
 
+const acceptChallenge = [
+  param('challenge_id')
+    .trim()
+    .notEmpty(),
+];
+
+const rejectChallenge = [
+  param('challenge_id')
+    .trim()
+    .notEmpty(),
+];
+
 module.exports = {
   getChallengesList,
   getChallenge,
+  acceptChallenge,
+  rejectChallenge,
 };
