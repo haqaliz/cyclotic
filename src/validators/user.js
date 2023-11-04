@@ -400,6 +400,15 @@ const likePost = [
     .notEmpty(),
 ];
 
+const updateUserChallenge = [
+  param('challenge_id')
+    .trim()
+    .notEmpty(),
+  body('content')
+    .notEmpty()
+    .isLength({ min: 1, max: 2000 }),
+];
+
 module.exports = {
   updateInfo,
   addRecordedDayForUser,
@@ -413,4 +422,5 @@ module.exports = {
   deletePost,
   getPost,
   likePost,
+  updateUserChallenge,
 };

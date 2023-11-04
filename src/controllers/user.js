@@ -218,6 +218,18 @@ const likePost = async (req, res) => {
   return res.sendStatus(200);
 };
 
+const updateUserChallenge = async (req, res) => {
+  const context = {
+    user_id: 'KyYG0UsYw5diNnoVcSYZbJikvhF2',//req.user?.uid,
+    challenge_id: req.params.challenge_id,
+    content: req.body.content,
+  };
+  const r = await services.user
+    .updateUserChallenge(context);
+  if (!r) return res.sendStatus(404);
+  return res.send(r);
+};
+
 module.exports = {
   getToken,
   info,
@@ -235,4 +247,5 @@ module.exports = {
   deletePost,
   getPost,
   likePost,
+  updateUserChallenge,
 };

@@ -143,4 +143,13 @@ router.post(
   userController.likePost,
 );
 
+// like a post for a user
+router.put(
+  '/challenges/:challenge_id',
+  // utils.isPrivileged,
+  userValidator.updateUserChallenge,
+  utils.validate,
+  userController.updateUserChallenge,
+);
+
 module.exports = router;

@@ -57,6 +57,7 @@ const rejectChallenge = async (req, res) => {
     user_id: req.user.uid,
     challenge_id: req.params.challenge_id,
   });
+  if (!r) return res.sendStatus(400);
   return res.sendStatus(200);
 };
 

@@ -1,7 +1,7 @@
-const auth = require('firebase/auth');
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 const _ = require('lodash');
+const { differenceInDays } = require('date-fns');
 
 const {
   collection,
@@ -271,9 +271,35 @@ const createUserChallenge = async (context) => {
 
 const deleteUserChallenge = async (context) => {
   const challenge = await getUserChallenge(context);
+  // we won't remove the challenges that has content
+  if (challenge?.content?.length) return;
   const ref = doc(firebase.db, 'users_challenges', challenge.id);
   await deleteDoc(ref);
   return ref;
+};
+
+const updateUserChallenge = async (context) => {
+  const userChallenge = await getUserChallenge(context);
+  if (!userChallenge) return;
+  const ref = doc(firebase.db, 'users_challenges', userChallenge?.id);
+  c = {
+    user_id: userChallenge?.user_id,
+    challenge_id: userChallenge?.challenge_id,
+    completed: userChallenge?.completed,
+    created_at: userChallenge?.created_at,
+    updated_at: new Date(),
+    content: userChallenge?.content,
+  };
+  const day = differenceInDays(new Date(), new Date(userChallenge.created_at.seconds * 1000));
+  // Users can only submit or edit 7 days for each challenge
+  if (day > 6) return;
+  if (!c.content) c.content = {};
+  c.content[day] = {
+    value: context.content,
+    created_at: new Date(),
+  };
+  await setDoc(ref, c);
+  return c;
 };
 
 module.exports = {
@@ -289,4 +315,5 @@ module.exports = {
   getUserChallenge,
   createUserChallenge,
   deleteUserChallenge,
+  updateUserChallenge,
 };
