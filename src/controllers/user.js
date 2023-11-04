@@ -6,6 +6,7 @@ const getToken = async (req, res) => {
   if (!req?.user || !req.headers.authorization) return res.sendStatus(401);
   const [_, token] = req.headers.authorization.split(' ');
   const user = await services.auth.verifyToken(token);
+  if (!user) res.sendStatus(401);
   return res.send(user)
 };
 
