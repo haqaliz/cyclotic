@@ -206,6 +206,32 @@ const likePostForUser = async (context) => {
   return ref;
 };
 
+const getUsersActiveChallenges = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'users_challenges',
+    ),
+    where('completed', '==', false),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
+const completeChallenge = async (context) => {
+  const ref = doc(firebase.db, 'users_challenges', context?.id);
+  await setDoc(ref, {
+    ...context,
+    completed: true,
+  });
+  return ref;
+};
+
 const getUserChallenges = async (context) => {
   const q = query(
     collection(
@@ -311,6 +337,8 @@ module.exports = {
   getPostForUser,
   deletePostForUser,
   likePostForUser,
+  getUsersActiveChallenges,
+  completeChallenge,
   getUserChallenges,
   getUserChallenge,
   createUserChallenge,
