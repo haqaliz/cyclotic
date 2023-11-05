@@ -11,10 +11,17 @@ const getToken = async (req, res) => {
 };
 
 const getUserPublicInfo = async (req, res) => {
-  const completedChallenges = await services.user.getUserCompletedChallenges({
-    user_id: req.params.user_id,
-  });
+  const [metadata, completedChallenges] = await Promise.all([
+    services.user.getUserMetadata({
+      user_id: req.params.user_id,
+    }),
+    services.user.getUserCompletedChallenges({
+      user_id: req.params.user_id,
+    })
+  ]);
   return res.send({
+    first_name: metadata?.first_name,
+    last_name: metadata?.last_name,
     completed_challenges: Object.values(completedChallenges.reduce((a, i) => {
       if (!a[i.challenge_id]) {
         a[i.challenge_id] = {
