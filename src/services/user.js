@@ -232,7 +232,7 @@ const completeChallenge = async (context) => {
   return ref;
 };
 
-const getUserChallenges = async (context) => {
+const getUserActiveChallenges = async (context) => {
   const q = query(
     collection(
       firebase.db,
@@ -252,7 +252,27 @@ const getUserChallenges = async (context) => {
   return res;
 };
 
-const getUserChallenge = async (context) => {
+const getUserCompletedChallenges = async (context) => {
+  const q = query(
+    collection(
+      firebase.db,
+      'users_challenges',
+    ),
+    and(
+      where('user_id', '==', context?.user_id),
+      where('completed', '==', true),
+    ),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
+const getUserActiveChallenge = async (context) => {
   const q = query(
     collection(
       firebase.db,
@@ -275,7 +295,7 @@ const getUserChallenge = async (context) => {
 };
 
 const createUserChallenge = async (context) => {
-  let challenge = await getUserChallenge(context);
+  let challenge = await getUserActiveChallenge(context);
   let content;
   if (!challenge) {
     const ref = doc(collection(firebase.db, 'users_challenges'));
@@ -296,7 +316,7 @@ const createUserChallenge = async (context) => {
 };
 
 const deleteUserChallenge = async (context) => {
-  const challenge = await getUserChallenge(context);
+  const challenge = await getUserActiveChallenge(context);
   // we won't remove the challenges that has content
   if (challenge?.content?.length) return;
   const ref = doc(firebase.db, 'users_challenges', challenge.id);
@@ -305,7 +325,7 @@ const deleteUserChallenge = async (context) => {
 };
 
 const updateUserChallenge = async (context) => {
-  const userChallenge = await getUserChallenge(context);
+  const userChallenge = await getUserActiveChallenge(context);
   if (!userChallenge) return;
   const ref = doc(firebase.db, 'users_challenges', userChallenge?.id);
   c = {
@@ -339,8 +359,9 @@ module.exports = {
   likePostForUser,
   getUsersActiveChallenges,
   completeChallenge,
-  getUserChallenges,
-  getUserChallenge,
+  getUserActiveChallenges,
+  getUserCompletedChallenges,
+  getUserActiveChallenge,
   createUserChallenge,
   deleteUserChallenge,
   updateUserChallenge,

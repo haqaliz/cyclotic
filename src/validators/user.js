@@ -189,6 +189,12 @@ const isValidPreferences = (v) => {
   return true;
 };
 
+const getInfo = [
+  param('user_id')
+    .trim()
+    .notEmpty(),
+];
+
 const updateInfo = [
   body('email')
     .optional()
@@ -410,6 +416,7 @@ const updateUserChallenge = [
 ];
 
 module.exports = {
+  getInfo,
   updateInfo,
   addRecordedDayForUser,
   updateRecordedDayForUser,

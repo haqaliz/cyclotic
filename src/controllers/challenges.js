@@ -20,7 +20,7 @@ const getChallengesList = async (req, res) => {
 const getAcceptedChallenges = async (req, res) => {
   if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const challenges = Object.fromEntries(globals.challenges.map((i) => [i.id, i]));
-  const userChallenges = await services.user.getUserChallenges({
+  const userChallenges = await services.user.getUserActiveChallenges({
     user_id: req.user.uid,
   });
   return res.send(userChallenges.map((i) => ({
@@ -32,7 +32,7 @@ const getAcceptedChallenges = async (req, res) => {
 const getChallenge = async (req, res) => {
   if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = globals.challenges.find((i) => i.id === req.params.challenge_id);
-  const userChallenge = await services.user.getUserChallenge({
+  const userChallenge = await services.user.getUserActiveChallenge({
     user_id: req.user.uid,
     challenge_id: r.id,
   });

@@ -21,6 +21,14 @@ router.get(
   userController.info,
 );
 
+// logged-in user information
+router.get(
+  '/:user_id/info',
+  userValidator.getInfo,
+  utils.validate,
+  userController.getUserPublicInfo,
+);
+
 // update logged-in user information
 router.put(
   '/info',

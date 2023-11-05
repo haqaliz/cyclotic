@@ -8,8 +8,6 @@ const { utils } = validators;
 
 const router = express.Router();
 
-router.use(utils.isPrivileged);
-
 // getting all challenges
 router.get(
   '/list',
@@ -21,12 +19,14 @@ router.get(
 // getting accepted challenges
 router.get(
   '/',
+  utils.isPrivileged,
   challengesController.getAcceptedChallenges,
 );
 
 // getting challenge
 router.get(
   '/:challenge_id',
+  utils.isPrivileged,
   challengesValidator.getChallenge,
   utils.validate,
   challengesController.getChallenge,
@@ -35,6 +35,7 @@ router.get(
 // accept challenge
 router.post(
   '/:challenge_id',
+  utils.isPrivileged,
   challengesValidator.acceptChallenge,
   utils.validate,
   challengesController.acceptChallenge,
@@ -43,6 +44,7 @@ router.post(
 // accept challenge
 router.delete(
   '/:challenge_id',
+  utils.isPrivileged,
   challengesValidator.rejectChallenge,
   utils.validate,
   challengesController.rejectChallenge,

@@ -10,6 +10,34 @@ const getToken = async (req, res) => {
   return res.send(user)
 };
 
+const getUserPublicInfo = async (req, res) => {
+  const completedChallenges = await services.user.getUserCompletedChallenges({
+    user_id: req.params.user_id,
+  });
+  return res.send({
+    completed_challenges: Object.values(completedChallenges.reduce((a, i) => {
+      if (!a[i.challenge_id]) {
+        a[i.challenge_id] = {
+          challenge_id: i.challenge_id,
+          history: {},
+        };
+      }
+      const len = Object.keys(i?.content ?? {}).length;
+      if (!a[i.challenge_id].history[len]) {
+        a[i.challenge_id].history[len] = 0;
+      }
+      a[i.challenge_id].history[len] += 1;
+      return a;
+    }, {})).map((i) => ({
+      ...i,
+      history: Object.keys(i.history).map((j) => ({
+        completed_days: parseInt(j, 10),
+        count: i.history[j],
+      })),
+    })),
+  });
+};
+
 const info = async (req, res) => {
   if (!req?.user) return res.sendStatus(401);
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
@@ -232,6 +260,7 @@ const updateUserChallenge = async (req, res) => {
 
 module.exports = {
   getToken,
+  getUserPublicInfo,
   info,
   updateInfo,
   getRecordedDaysForUser,
