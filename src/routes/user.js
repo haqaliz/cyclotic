@@ -136,7 +136,6 @@ router.delete(
 // get a post for a user
 router.get(
   '/posts/:post_id',
-  utils.isPrivileged,
   userValidator.getPost,
   utils.validate,
   userController.getPost,
