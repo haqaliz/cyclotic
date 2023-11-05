@@ -199,6 +199,14 @@ const updateInfo = [
   body('email')
     .optional()
     .isEmail(),
+  body('first_name')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('last_name')
+    .optional()
+    .trim()
+    .notEmpty(),
   body('prefs')
     .optional()
     .custom(isValidPreferences),

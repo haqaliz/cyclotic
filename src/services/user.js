@@ -44,7 +44,9 @@ const upsertUserMetadata = async (context) => {
     content = {
       user_id: context?.user_id,
       email: context?.email,
-      prefs: context?.prefs, 
+      first_name: context?.first_name,
+      last_name: context?.last_name,
+      prefs: context?.prefs,
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -55,6 +57,8 @@ const upsertUserMetadata = async (context) => {
   content = {
     user_id: metadata?.user_id,
     email: context?.email ? context?.email : metadata?.email,
+    first_name: context?.first_name ? context?.first_name : metadata?.first_name,
+    last_name: context?.last_name ? context?.last_name : metadata?.last_name,
     prefs: {
       ...metadata?.prefs,
       ...context?.prefs,
