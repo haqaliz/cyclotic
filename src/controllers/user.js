@@ -202,8 +202,9 @@ const createPost = async (req, res) => {
     hashtags,
     links,
   };
-  if (req.body.parent_id) {
+  if (req.body.parent_id && req.body.parent_type) {
     context.parent_id = req.body.parent_id;
+    context.parent_type = req.body.parent_type;
   }
   await services.user.createPostForUser(context);
   return res.sendStatus(200);
@@ -257,7 +258,7 @@ const likePost = async (req, res) => {
 
 const updateUserChallenge = async (req, res) => {
   const context = {
-    user_id: 'KyYG0UsYw5diNnoVcSYZbJikvhF2',//req.user?.uid,
+    user_id: req.user?.uid,
     challenge_id: req.params.challenge_id,
     content: req.body.content,
   };

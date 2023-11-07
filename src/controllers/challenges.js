@@ -32,12 +32,16 @@ const getAcceptedChallenges = async (req, res) => {
 const getChallenge = async (req, res) => {
   if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = globals.challenges.find((i) => i.id === req.params.challenge_id);
+  const challengeComments = await services.challenges.getPostsForChallenge({
+    parent_id: r.id,
+  });
   const userChallenge = await services.user.getUserActiveChallenge({
     user_id: req.user.uid,
     challenge_id: r.id,
   });
   return res.send({
     ...r,
+    comments: challengeComments,
     user_challenge: userChallenge,
   });
 };

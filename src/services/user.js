@@ -1,7 +1,7 @@
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 const _ = require('lodash');
-const { differenceInDays } = require('date-fns');
+const { differenceInDays, startOfDay } = require('date-fns');
 
 const {
   collection,
@@ -109,6 +109,7 @@ const getPostsForUser = async (context) => {
   if (context.parent_id) {
     criteria.push(
       where('parent_id', '==', context.parent_id),
+      where('parent_type', '==', 'post'),
     );
   }
   const queryChain = [
@@ -340,7 +341,7 @@ const updateUserChallenge = async (context) => {
     updated_at: new Date(),
     content: userChallenge?.content,
   };
-  const day = differenceInDays(new Date(), new Date(userChallenge.created_at.seconds * 1000));
+  const day = differenceInDays(startOfDay(new Date()), startOfDay(new Date(userChallenge.created_at.seconds * 1000)));
   // Users can only submit or edit 7 days for each challenge
   if (day > 6) return;
   if (!c.content) c.content = {};

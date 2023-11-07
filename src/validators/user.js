@@ -362,6 +362,10 @@ const createPost = [
   body('content')
     .notEmpty()
     .isLength({ min: 1, max: 144 }),
+  body('parent_type')
+    .optional()
+    .trim()
+    .notEmpty(),
   body('parent_id')
     .optional()
     .trim()
