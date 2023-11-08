@@ -50,11 +50,15 @@ const info = async (req, res) => {
   const subscription = await services.subscriptions.getActiveSubscriptionForUser({
     user_id: req.user.uid,
   });
+  const challenges = await services.user.getUserActiveChallenges({
+    user_id: req.user.uid,
+  });
   return res.status(200).send({
     id: req.user.uid,
     email: req.user.email,
     metadata: req.user.metadata,
     subscription,
+    challenges: challenges.map((i) => i.challenge_id),
   });
 };
 
