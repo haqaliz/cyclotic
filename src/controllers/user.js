@@ -283,6 +283,17 @@ const getChallengesHistory = async (req, res) => {
   return res.send(r);
 };
 
+const getNotifications = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+    type: req.query.type,
+  };
+  const r = await services.user.getUserNotifications(context);
+  return res.send(r);
+};
+
 module.exports = {
   getToken,
   getUserPublicInfo,
@@ -303,4 +314,5 @@ module.exports = {
   likePost,
   updateUserChallenge,
   getChallengesHistory,
+  getNotifications,
 };

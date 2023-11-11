@@ -30,7 +30,6 @@ module.exports = async () => {
                 user_id: challenge.user_id,
                 email: to,
                 reference_id: challenge?.id,
-                day: new Date(),
             });
             if (r) {
                 await resources.mailer.send(

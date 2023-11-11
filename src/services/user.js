@@ -368,6 +368,42 @@ const updateUserChallenge = async (context) => {
   return c;
 };
 
+const getUserNotifications = async (context) => {
+  const criteria = [];
+  if (!context.user_id) return [];
+  criteria.push(
+    where('user_id', '==', context.user_id),
+  );
+  if (context.from && context.to) {
+    criteria.push(
+      where('created_at', '>=', context.from),
+      where('created_at', '<=', context.to),
+    );
+  }
+  if (context.type) {
+    criteria.push(
+      where('type', '==', context.type),
+    );
+  }
+  const q = query(
+    collection(
+      firebase.db,
+      'notifications',
+    ),
+    and(
+      ...criteria,
+    ),
+    orderBy('created_at', 'desc'),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
 module.exports = {
   getUserMetadata,
   upsertUserMetadata,
@@ -385,4 +421,5 @@ module.exports = {
   createUserChallenge,
   deleteUserChallenge,
   updateUserChallenge,
+  getUserNotifications,
 };

@@ -442,6 +442,25 @@ const getChallengesHistory = [
     .customSanitizer(sanitizeUnixEpoch),
 ];
 
+const getNotifications = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('type')
+    .optional()
+    .trim()
+    .notEmpty(),
+];
+
 module.exports = {
   getInfo,
   updateInfo,
@@ -458,4 +477,5 @@ module.exports = {
   likePost,
   updateUserChallenge,
   getChallengesHistory,
+  getNotifications,
 };
