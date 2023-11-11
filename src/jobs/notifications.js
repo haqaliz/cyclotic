@@ -26,62 +26,72 @@ module.exports = async () => {
         // Fertile Window Notification
         if (
             notifs?.fertility_window
+            && diffSFW >= 0
             && diffSFW <= FertileWindowLength
         ) {
             const to = usersMetadata[i]?.email;
             const subject = `${utils.ordinalSuffixOf(diffSFW)} day of your Fertility Window Has Begun!`;
             const templateOptions = {
                 title: subject,
-                name: to,
+                name: usersMetadata[i]?.first_name || to,
                 day: diffSFW,
                 ordinalDay: utils.ordinalSuffixOf(diffSFW),
                 date: format(startFertileWindow, 'do MMM, yyyy'),
             };
-            const r = await services.notifications.addNotification({
-                type: 'fertility_window',
-                user_id: MCs[i]?.user_id,
-                email: to,
-                reference_id: MCs[i]?.id,
-                start_of_fertility_window: startFertileWindow,
-                day: diffSFW,
-            });
-            if (r) {
-                await resources.mailer.send(
-                    to,
-                    subject,
-                    templates.fertilityWindow(templateOptions),
-                );
+            try {
+                const r = await services.notifications.addNotification({
+                    type: 'fertility_window',
+                    user_id: MCs[i]?.user_id,
+                    email: to,
+                    reference_id: MCs[i]?.id,
+                    start_of_fertility_window: startFertileWindow,
+                    day: diffSFW,
+                });
+                if (r) {
+                    await resources.mailer.send(
+                        to,
+                        subject,
+                        templates.fertilityWindow(templateOptions),
+                    );
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
 
         // PMS Symptoms
         if (
             notifs?.pms_symptoms
+            && diffSRMC >= 0
             && diffSRMC <= menstrualCycleLength
         ) {
             const to = usersMetadata[i]?.email;
             const subject = `${utils.ordinalSuffixOf(diffSRMC)} day of your menstrual cycle!`;
             const templateOptions = {
                 title: subject,
-                name: to,
+                name: usersMetadata[i]?.first_name || to,
                 day: diffSRMC,
                 ordinalDay: utils.ordinalSuffixOf(diffSRMC),
                 date: format(startRangeOfMC, 'do MMM, yyyy'),
             };
-            const r = await services.notifications.addNotification({
-                type: 'pms_symptoms',
-                user_id: MCs[i]?.user_id,
-                email: to,
-                reference_id: MCs[i]?.id,
-                start_of_menstrual_cycle: startRangeOfMC,
-                day: diffSRMC,
-            });
-            if (r) {
-                await resources.mailer.send(
-                    to,
-                    subject,
-                    templates.pmsSymptoms(templateOptions),
-                );
+            try {
+                const r = await services.notifications.addNotification({
+                    type: 'pms_symptoms',
+                    user_id: MCs[i]?.user_id,
+                    email: to,
+                    reference_id: MCs[i]?.id,
+                    start_of_menstrual_cycle: startRangeOfMC,
+                    day: diffSRMC,
+                });
+                if (r) {
+                    await resources.mailer.send(
+                        to,
+                        subject,
+                        templates.pmsSymptoms(templateOptions),
+                    );
+                }
+            } catch (error) {
+                console.log(error);
             }
         }
     }

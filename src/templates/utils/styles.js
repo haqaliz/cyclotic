@@ -83,6 +83,28 @@ body {
     transform: scale(1.3);
 }
 
+.box {
+    display: flex; 
+    padding: 0.5rem; 
+    flex-direction: column; 
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.1); 
+    -webkit-transition: all 300ms ease-in-out;
+    -moz-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+    text-decoration: none;
+    color: #000000;
+
+    @media (min-width: 768px) { 
+        padding: 1rem; 
+    }      
+}
+
+.box:hover,
+.box:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .footer {
     background: linear-gradient(to right, rgb(233, 213, 255), #ff4d7a);
     padding: 20px;
