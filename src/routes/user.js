@@ -159,4 +159,13 @@ router.put(
   userController.updateUserChallenge,
 );
 
+// get a post for a user
+router.get(
+  '/challenges/history',
+  utils.isPrivileged,
+  userValidator.getChallengesHistory,
+  utils.validate,
+  userController.getChallengesHistory,
+);
+
 module.exports = router;

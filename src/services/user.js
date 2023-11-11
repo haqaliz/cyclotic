@@ -257,15 +257,30 @@ const getUserActiveChallenges = async (context) => {
   return res;
 };
 
-const getUserCompletedChallenges = async (context) => {
+const getUserChallenges = async (context) => {
+  const criteria = [];
+  if (!context.user_id) return [];
+  criteria.push(
+    where('user_id', '==', context.user_id),
+  );
+  if (context.from && context.to) {
+    criteria.push(
+      where('created_at', '>=', context.from),
+      where('created_at', '<=', context.to),
+    );
+  }
+  if ('completed' in context) {
+    criteria.push(
+      where('completed', '==', context.completed),
+    );
+  }
   const q = query(
     collection(
       firebase.db,
       'users_challenges',
     ),
     and(
-      where('user_id', '==', context?.user_id),
-      where('completed', '==', true),
+      ...criteria,
     ),
   );
   const snapshot = await getDocs(q);
@@ -365,7 +380,7 @@ module.exports = {
   getUsersActiveChallenges,
   completeChallenge,
   getUserActiveChallenges,
-  getUserCompletedChallenges,
+  getUserChallenges,
   getUserActiveChallenge,
   createUserChallenge,
   deleteUserChallenge,

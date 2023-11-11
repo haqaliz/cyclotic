@@ -15,9 +15,10 @@ const getUserPublicInfo = async (req, res) => {
     services.user.getUserMetadata({
       user_id: req.params.user_id,
     }),
-    services.user.getUserCompletedChallenges({
+    services.user.getUserChallenges({
       user_id: req.params.user_id,
-    })
+      completed: true,
+    }),
   ]);
   return res.send({
     first_name: metadata?.first_name,
@@ -272,6 +273,16 @@ const updateUserChallenge = async (req, res) => {
   return res.send(r);
 };
 
+const getChallengesHistory = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await services.user.getUserChallenges(context);
+  return res.send(r);
+};
+
 module.exports = {
   getToken,
   getUserPublicInfo,
@@ -291,4 +302,5 @@ module.exports = {
   getPost,
   likePost,
   updateUserChallenge,
+  getChallengesHistory,
 };

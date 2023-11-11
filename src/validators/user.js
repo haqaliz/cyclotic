@@ -427,6 +427,21 @@ const updateUserChallenge = [
     .isLength({ min: 1, max: 2000 }),
 ];
 
+const getChallengesHistory = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+];
+
 module.exports = {
   getInfo,
   updateInfo,
@@ -442,4 +457,5 @@ module.exports = {
   getPost,
   likePost,
   updateUserChallenge,
+  getChallengesHistory,
 };
