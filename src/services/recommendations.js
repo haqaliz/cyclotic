@@ -1,6 +1,7 @@
 const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 const flowIntensityPattern = require('./flow-intensity-pattern');
+const insights = require('./insights');
 const dateFns = require('date-fns');
 
 const { subDays } = dateFns;
@@ -48,21 +49,31 @@ const getMenstruationProductsRecommendations = async (context) => {
 const getRecommendationsForUser = async (context) => {
   const to = new Date();
   const from = subDays(to, 30);
-  const flowIntensityOverMonth = await flowIntensityPattern.getFlowIntensityForUser({
-    user_id: context?.uid,
-    from,
-    to,
-  });
-  const MP = await getMenstruationProductsRecommendations(context);
+  const [
+    flowIntensityOverMonth,
+    menstruationProducts,
+    hormoneHealthInsights,
+  ] = await Promise.all([
+    flowIntensityPattern.getFlowIntensityForUser({
+      user_id: context?.uid,
+      from,
+      to,
+    }),
+    getMenstruationProductsRecommendations(context),
+    insights.getInsights({
+      type: 'hormone_health',
+    }),
+  ]);
   const flowIntensity = flowIntensityOverMonth?.[0]?.flow_intensity ?? 0;
-  const smartMP = MP.filter((i) => {
+  const smartMenstruationProducts = menstruationProducts.filter((i) => {
     if (flowIntensity < 5.5) return i.type === 'pad';
     if (flowIntensity >= 5.5 && flowIntensity < 8) return i.type === 'tampon';
     // flowIntensity >= 8
     return i.type === 'cup';
   });
   return {
-    menstruation_products: smartMP.length > 0 ? smartMP : MP,
+    menstruation_products: smartMenstruationProducts.length > 0 ? smartMenstruationProducts : menstruationProducts,
+    hormone_health_insights: hormoneHealthInsights,
   };
 };
 

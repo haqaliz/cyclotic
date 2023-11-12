@@ -20,11 +20,20 @@ const createInsight = async (context) => {
   return ref;
 };
 
-const getInsights = async () => {
+const getInsights = async (context) => {
+  const criteria = [];
+  if (context?.type) {
+    criteria.push(
+      where('type', '==', context.type),
+    );
+  }
   const q = query(
     collection(
       firebase.db,
       'insights',
+    ),
+    and(
+      ...criteria,
     ),
   );
   const snapshot = await getDocs(q);
