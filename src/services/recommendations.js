@@ -53,6 +53,7 @@ const getRecommendationsForUser = async (context) => {
     flowIntensityOverMonth,
     menstruationProducts,
     hormoneHealthInsights,
+    nutritionalGuidances
   ] = await Promise.all([
     flowIntensityPattern.getFlowIntensityForUser({
       user_id: context?.uid,
@@ -62,6 +63,9 @@ const getRecommendationsForUser = async (context) => {
     getMenstruationProductsRecommendations(context),
     insights.getInsights({
       type: 'hormone_health',
+    }),
+    insights.getInsights({
+      type: 'nutritional_guidance',
     }),
   ]);
   const flowIntensity = flowIntensityOverMonth?.[0]?.flow_intensity ?? 0;
@@ -74,6 +78,7 @@ const getRecommendationsForUser = async (context) => {
   return {
     menstruation_products: smartMenstruationProducts.length > 0 ? smartMenstruationProducts : menstruationProducts,
     hormone_health_insights: hormoneHealthInsights,
+    nutritional_guidances: nutritionalGuidances
   };
 };
 

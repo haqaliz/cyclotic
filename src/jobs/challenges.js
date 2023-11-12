@@ -10,7 +10,7 @@ module.exports = async () => {
     if (!globals.challenges) globals.challenges = await services.challenges.getActiveChallenges();
     const challenges = await services.user.getUsersActiveChallenges();
     for (const challenge of challenges) {
-        const diff = differenceInDays(new Date(), new Date(challenge.created_at.seconds * 1000));
+        const diff = differenceInDays(new Date(), new Date(challenge.created_at.seconds * 1000)) + 1;
         if (diff <= 6) continue;
         await services.user.completeChallenge(challenge);
         const chlng = globals.challenges.find((i) => i.id === challenge.challenge_id);
