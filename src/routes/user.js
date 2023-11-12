@@ -208,6 +208,8 @@ router.delete(
 router.get(
   '/insights',
   utils.isPrivilegedForAdmin,
+  userValidator.getInsights,
+  utils.validate,
   userController.getInsights,
 );
 

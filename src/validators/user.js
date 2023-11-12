@@ -470,6 +470,10 @@ const createInsight = [
     .optional()
     .trim()
     .notEmpty(),
+  body('category')
+    .optional()
+    .trim()
+    .notEmpty(),
   body('content')
     .optional()
     .isArray(),
@@ -487,6 +491,10 @@ const updateInsight = [
     .optional()
     .trim()
     .notEmpty(),
+  body('category')
+    .optional()
+    .trim()
+    .notEmpty(),
   body('content')
     .optional()
     .isArray(),
@@ -494,6 +502,13 @@ const updateInsight = [
 
 const deleteInsight = [
   param('insight_id')
+    .trim()
+    .notEmpty(),
+];
+
+const getInsights = [
+  query('type')
+    .optional()
     .trim()
     .notEmpty(),
 ];
@@ -518,4 +533,5 @@ module.exports = {
   createInsight,
   updateInsight,
   deleteInsight,
+  getInsights,
 };
