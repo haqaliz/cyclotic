@@ -7,6 +7,7 @@ const subscriptions = require('./subscriptions');
 const challenges = require('./challenges');
 const notifications = require('./notifications');
 const recommendations = require('./recommendations');
+const insights = require('./insights');
 
 module.exports = {
     misc,
@@ -18,4 +19,5 @@ module.exports = {
     challenges,
     notifications,
     recommendations,
+    insights,
 };

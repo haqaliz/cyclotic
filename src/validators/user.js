@@ -461,6 +461,43 @@ const getNotifications = [
     .notEmpty(),
 ];
 
+const createInsight = [
+  body('type')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('name')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('content')
+    .optional()
+    .isArray(),
+];
+
+const updateInsight = [
+  param('insight_id')
+    .trim()
+    .notEmpty(),
+  body('type')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('name')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('content')
+    .optional()
+    .isArray(),
+];
+
+const deleteInsight = [
+  param('insight_id')
+    .trim()
+    .notEmpty(),
+];
+
 module.exports = {
   getInfo,
   updateInfo,
@@ -478,4 +515,7 @@ module.exports = {
   updateUserChallenge,
   getChallengesHistory,
   getNotifications,
+  createInsight,
+  updateInsight,
+  deleteInsight,
 };

@@ -7,6 +7,11 @@ const isPrivileged = (req, res, next) => {
   next();
 };
 
+const isPrivilegedForAdmin = (req, res, next) => {
+  if (!req?.user || !req?.user?.metadata?.admin) return res.sendStatus(403);
+  next();
+};
+
 const validate = (req, res, next) => {
   const r = validationResult(req);
   if (r.isEmpty()) return next();
@@ -25,5 +30,6 @@ const validate = (req, res, next) => {
 
 module.exports = {
   isPrivileged,
+  isPrivilegedForAdmin,
   validate,
 };

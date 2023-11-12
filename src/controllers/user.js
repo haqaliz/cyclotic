@@ -294,6 +294,40 @@ const getNotifications = async (req, res) => {
   return res.send(r);
 };
 
+const createInsight = async (req, res) => {
+  const context = {
+    type: req.body.type,
+    name: req.body.name,
+    content: req.body.content,
+  };
+  await services.insights.createInsight(context);
+  return res.sendStatus(200);
+};
+
+const updateInsight = async (req, res) => {
+  const context = {
+    insight_id: req.params.insight_id,
+    type: req.body.type,
+    name: req.body.name,
+    content: req.body.content,
+  };
+  await services.insights.updateInsight(context);
+  return res.sendStatus(200);
+};
+
+const deleteInsight = async (req, res) => {
+  const context = {
+    insight_id: req.params.insight_id,
+  };
+  await services.insights.deleteInsight(context);
+  return res.sendStatus(200);
+};
+
+const getInsights = async (_req, res) => {
+  const r = await services.insights.getInsights();
+  return res.send(r);
+};
+
 module.exports = {
   getToken,
   getUserPublicInfo,
@@ -315,4 +349,8 @@ module.exports = {
   updateUserChallenge,
   getChallengesHistory,
   getNotifications,
+  createInsight,
+  getInsights,
+  updateInsight,
+  deleteInsight,
 };

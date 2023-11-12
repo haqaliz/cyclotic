@@ -63,6 +63,7 @@ const upsertUserMetadata = async (context) => {
       ...metadata?.prefs,
       ...context?.prefs,
     },
+    admin: metadata?.admin,
     created_at: metadata?.created_at,
     updated_at: new Date(),
   };
