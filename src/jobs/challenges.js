@@ -7,7 +7,7 @@ const dateFns = require('date-fns');
 const { differenceInDays } = dateFns;
 
 module.exports = async () => {
-    if (!globals.challenges) globals.challenges = await services.challenges.getActiveChallenges();
+    if (!globals.challenges?.length) globals.challenges = await services.challenges.getActiveChallenges();
     const challenges = await services.user.getUsersActiveChallenges();
     for (const challenge of challenges) {
         const diff = differenceInDays(new Date(), new Date(challenge.created_at.seconds * 1000)) + 1;

@@ -18,15 +18,15 @@ module.exports = async () => {
     for (const i in MCs) {
         const startRangeOfMC = new Date(MCs[i]?.created_at?.seconds * 1000);
         const startFertileWindow = addDays(startRangeOfMC, menstrualCycleLength + gapBetweenMCandFW);
-        const diffSRMC = differenceInDays(new Date(), startRangeOfMC);
-        const diffSFW = differenceInDays(new Date(), startFertileWindow);
+        const diffSRMC = differenceInDays(new Date(), startRangeOfMC) + 1;
+        const diffSFW = differenceInDays(new Date(), startFertileWindow) + 1;
 
         const notifs = usersMetadata[i]?.prefs?.notifications;
 
         // Fertile Window Notification
         if (
             notifs?.fertility_window
-            && diffSFW >= 0
+            && diffSFW > 0
             && diffSFW <= FertileWindowLength
         ) {
             const to = usersMetadata[i]?.email;
@@ -62,7 +62,7 @@ module.exports = async () => {
         // PMS Symptoms
         if (
             notifs?.pms_symptoms
-            && diffSRMC >= 0
+            && diffSRMC > 0
             && diffSRMC <= menstrualCycleLength
         ) {
             const to = usersMetadata[i]?.email;

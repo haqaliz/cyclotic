@@ -2,7 +2,7 @@ const services = require('../services');
 const globals = require('../globals');
 
 const getChallengesList = async (req, res) => {
-  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  if (!globals.challenges?.length || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = globals.challenges.reduce((a, i) => {
     const type = i.type?.toLowerCase()?.replace(/[ -_]+/g, '_');
     if (!a[type]) a[type] = [];
@@ -18,7 +18,7 @@ const getChallengesList = async (req, res) => {
 };
 
 const getAcceptedChallenges = async (req, res) => {
-  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  if (!globals.challenges?.length || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const challenges = Object.fromEntries(globals.challenges.map((i) => [i.id, i]));
   const userChallenges = await services.user.getUserActiveChallenges({
     user_id: req.user.uid,
@@ -30,7 +30,7 @@ const getAcceptedChallenges = async (req, res) => {
 };
 
 const getChallenge = async (req, res) => {
-  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  if (!globals.challenges?.length || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = globals.challenges.find((i) => i.id === req.params.challenge_id);
   const challengeComments = await services.challenges.getPostsForChallenge({
     parent_id: r.id,
@@ -47,7 +47,7 @@ const getChallenge = async (req, res) => {
 };
 
 const acceptChallenge = async (req, res) => {
-  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  if (!globals.challenges?.length || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = await services.user.createUserChallenge({
     user_id: req.user.uid,
     challenge_id: req.params.challenge_id,
@@ -56,7 +56,7 @@ const acceptChallenge = async (req, res) => {
 };
 
 const rejectChallenge = async (req, res) => {
-  if (!globals.challenges || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
+  if (!globals.challenges?.length || req.query.update) globals.challenges = await services.challenges.getActiveChallenges();
   const r = await services.user.deleteUserChallenge({
     user_id: req.user.uid,
     challenge_id: req.params.challenge_id,
