@@ -461,6 +461,42 @@ const getNotifications = [
     .notEmpty(),
 ];
 
+const createMessageForAdvisor = [
+  body('conversation_id')
+    .optional()
+    .trim(),
+  body('query')
+    .trim()
+    .notEmpty(),
+];
+
+const getConversationForAdvisor = [
+  param('conversation_id')
+    .trim()
+    .notEmpty(),
+  query('limit')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric(),
+  query('start_after')
+    .optional()
+    .trim()
+    .notEmpty(),
+];
+
+const getConversationsListForAdvisor = [
+  query('limit')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric(),
+  query('start_after')
+    .optional()
+    .trim()
+    .notEmpty(),
+];
+
 const createInsight = [
   body('type')
     .optional()
@@ -530,6 +566,9 @@ module.exports = {
   updateUserChallenge,
   getChallengesHistory,
   getNotifications,
+  createMessageForAdvisor,
+  getConversationForAdvisor,
+  getConversationsListForAdvisor,
   createInsight,
   updateInsight,
   deleteInsight,

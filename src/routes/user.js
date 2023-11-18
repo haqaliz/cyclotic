@@ -177,6 +177,33 @@ router.get(
   userController.getNotifications,
 );
 
+// create a message for a user to advisor
+router.post(
+  '/advisor/conversations',
+  utils.isPrivileged,
+  userValidator.createMessageForAdvisor,
+  utils.validate,
+  userController.createMessageForAdvisor,
+);
+
+// get a conversation for a user to advisor
+router.get(
+  '/advisor/conversations/:conversation_id',
+  utils.isPrivileged,
+  userValidator.getConversationForAdvisor,
+  utils.validate,
+  userController.getConversationForAdvisor,
+);
+
+// get conversations list for a user to advisor
+router.get(
+  '/advisor/conversations',
+  utils.isPrivileged,
+  userValidator.getConversationsListForAdvisor,
+  utils.validate,
+  userController.getConversationsListForAdvisor,
+);
+
 // create insights for a admin user
 router.post(
   '/insights',

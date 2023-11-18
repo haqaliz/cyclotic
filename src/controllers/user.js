@@ -294,6 +294,40 @@ const getNotifications = async (req, res) => {
   return res.send(r);
 };
 
+const createMessageForAdvisor = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    conversation_id: req.body.conversation_id,
+    query: req.body.query,
+  };
+  const r = await resources.advisor.createMessage(context);
+  if (!r) return res.sendStatus(400);
+  return res.send(r);
+};
+
+const getConversationForAdvisor = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    conversation_id: req.params.conversation_id,
+    limit: req.query.limit || 20,
+    first_id: req.query.start_after,
+  };
+  const r = await resources.advisor.getConversationMessages(context);
+  if (!r) return res.sendStatus(400);
+  return res.send(r);
+};
+
+const getConversationsListForAdvisor = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    limit: req.query.limit || 20,
+    last_id: req.query.start_after,
+  };
+  const r = await resources.advisor.getConversationsList(context);
+  if (!r) return res.sendStatus(400);
+  return res.send(r);
+};
+
 const createInsight = async (req, res) => {
   const context = {
     type: req.body.type,
@@ -354,6 +388,9 @@ module.exports = {
   updateUserChallenge,
   getChallengesHistory,
   getNotifications,
+  createMessageForAdvisor,
+  getConversationForAdvisor,
+  getConversationsListForAdvisor,
   createInsight,
   getInsights,
   updateInsight,
