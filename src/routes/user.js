@@ -195,6 +195,15 @@ router.get(
   userController.getConversationForAdvisor,
 );
 
+// delete a conversation for a user to advisor
+router.delete(
+  '/advisor/conversations/:conversation_id',
+  utils.isPrivileged,
+  userValidator.deleteConversationForAdvisor,
+  utils.validate,
+  userController.deleteConversationForAdvisor,
+);
+
 // get conversations list for a user to advisor
 router.get(
   '/advisor/conversations',

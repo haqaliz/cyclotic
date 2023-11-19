@@ -485,6 +485,12 @@ const getConversationForAdvisor = [
     .notEmpty(),
 ];
 
+const deleteConversationForAdvisor = [
+  param('conversation_id')
+    .trim()
+    .notEmpty(),
+];
+
 const getConversationsListForAdvisor = [
   query('limit')
     .optional()
@@ -568,6 +574,7 @@ module.exports = {
   getNotifications,
   createMessageForAdvisor,
   getConversationForAdvisor,
+  deleteConversationForAdvisor,
   getConversationsListForAdvisor,
   createInsight,
   updateInsight,

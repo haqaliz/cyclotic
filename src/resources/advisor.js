@@ -40,6 +40,17 @@ const getConversationMessages = async (payload) => {
 	return r.json();
 };
 
+const deleteConversation = async (payload) => {
+  const r = await fetch(`${ORIGIN}/conversations/${payload?.conversation_id}`, {
+    ...REQUEST_OPTIONS,
+    method: 'DELETE',
+    body: JSON.stringify({
+      user: payload?.user_id,
+    }),
+  }).catch((e) => e.response);
+  return !!r?.ok;
+};
+
 const getConversationsList = async (payload) => {
   const lastId = payload?.last_id ? `&last_id=${payload.last_id}` : '';
   const r = await fetch(`${ORIGIN}/conversations?user=${
@@ -57,5 +68,6 @@ const getConversationsList = async (payload) => {
 module.exports = {
   createMessage,
   getConversationMessages,
+  deleteConversation,
   getConversationsList,
 };

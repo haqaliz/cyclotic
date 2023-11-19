@@ -317,6 +317,16 @@ const getConversationForAdvisor = async (req, res) => {
   return res.send(r);
 };
 
+const deleteConversationForAdvisor = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    conversation_id: req.params.conversation_id,
+  };
+  const r = await resources.advisor.deleteConversation(context);
+  if (!r) return res.sendStatus(400);
+  return res.sendStatus(200);
+};
+
 const getConversationsListForAdvisor = async (req, res) => {
   const context = {
     user_id: req.user?.uid,
@@ -390,6 +400,7 @@ module.exports = {
   getNotifications,
   createMessageForAdvisor,
   getConversationForAdvisor,
+  deleteConversationForAdvisor,
   getConversationsListForAdvisor,
   createInsight,
   getInsights,
