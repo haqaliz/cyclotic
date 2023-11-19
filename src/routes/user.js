@@ -213,40 +213,4 @@ router.get(
   userController.getConversationsListForAdvisor,
 );
 
-// create insights for a admin user
-router.post(
-  '/insights',
-  utils.isPrivilegedForAdmin,
-  userValidator.createInsight,
-  utils.validate,
-  userController.createInsight,
-);
-
-// update a insight for a admin user
-router.put(
-  '/insights/:insight_id',
-  utils.isPrivilegedForAdmin,
-  userValidator.updateInsight,
-  utils.validate,
-  userController.updateInsight,
-);
-
-// delete a insight for a admin user
-router.delete(
-  '/insights/:insight_id',
-  utils.isPrivilegedForAdmin,
-  userValidator.deleteInsight,
-  utils.validate,
-  userController.deleteInsight,
-);
-
-// create a insight for a admin user
-router.get(
-  '/insights',
-  utils.isPrivilegedForAdmin,
-  userValidator.getInsights,
-  utils.validate,
-  userController.getInsights,
-);
-
 module.exports = router;

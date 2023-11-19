@@ -503,58 +503,6 @@ const getConversationsListForAdvisor = [
     .notEmpty(),
 ];
 
-const createInsight = [
-  body('type')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('name')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('category')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('content')
-    .optional()
-    .isArray(),
-];
-
-const updateInsight = [
-  param('insight_id')
-    .trim()
-    .notEmpty(),
-  body('type')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('name')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('category')
-    .optional()
-    .trim()
-    .notEmpty(),
-  body('content')
-    .optional()
-    .isArray(),
-];
-
-const deleteInsight = [
-  param('insight_id')
-    .trim()
-    .notEmpty(),
-];
-
-const getInsights = [
-  query('type')
-    .optional()
-    .trim()
-    .notEmpty(),
-];
-
 module.exports = {
   getInfo,
   updateInfo,
@@ -576,8 +524,4 @@ module.exports = {
   getConversationForAdvisor,
   deleteConversationForAdvisor,
   getConversationsListForAdvisor,
-  createInsight,
-  updateInsight,
-  deleteInsight,
-  getInsights,
 };

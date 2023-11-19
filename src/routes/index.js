@@ -42,6 +42,7 @@ const init = () => {
   });
 
   app.use('/', require('./misc'));
+  app.use('/admin', require('./admin'));
   app.use('/user', require('./user'));
   app.use('/products', require('./products'));
   app.use('/challenges', require('./challenges'));

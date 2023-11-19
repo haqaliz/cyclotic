@@ -8,6 +8,7 @@ const challenges = require('./challenges');
 const notifications = require('./notifications');
 const recommendations = require('./recommendations');
 const insights = require('./insights');
+const activities = require('./activities');
 
 module.exports = {
     misc,
@@ -20,4 +21,5 @@ module.exports = {
     notifications,
     recommendations,
     insights,
+    activities,
 };
