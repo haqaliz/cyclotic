@@ -2,6 +2,7 @@ const firestore = require('firebase/firestore');
 const { firebase } = require('../config');
 const flowIntensityPattern = require('./flow-intensity-pattern');
 const insights = require('./insights');
+const activities = require('./activities');
 const dateFns = require('date-fns');
 
 const { subDays } = dateFns;
@@ -11,7 +12,7 @@ const {
   query,
   where,
   getDocs,
-  and
+  and,
 } = firestore;
 
 const getMenstruationProductsRecommendations = async (context) => {
@@ -53,7 +54,8 @@ const getRecommendationsForUser = async (context) => {
     flowIntensityOverMonth,
     menstruationProducts,
     hormoneHealthInsights,
-    nutritionalGuidances
+    nutritionalGuidances,
+    recommendedActivities,
   ] = await Promise.all([
     flowIntensityPattern.getFlowIntensityForUser({
       user_id: context?.uid,
@@ -67,6 +69,9 @@ const getRecommendationsForUser = async (context) => {
     insights.getInsights({
       type: 'nutritional_guidance',
     }),
+    activities.getActivities({
+      limit: 10,
+    }),
   ]);
   const flowIntensity = flowIntensityOverMonth?.[0]?.flow_intensity ?? 0;
   const smartMenstruationProducts = menstruationProducts.filter((i) => {
@@ -78,7 +83,8 @@ const getRecommendationsForUser = async (context) => {
   return {
     menstruation_products: smartMenstruationProducts.length > 0 ? smartMenstruationProducts : menstruationProducts,
     hormone_health_insights: hormoneHealthInsights,
-    nutritional_guidances: nutritionalGuidances
+    nutritional_guidances: nutritionalGuidances,
+    activities: recommendedActivities,
   };
 };
 

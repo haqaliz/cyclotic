@@ -12,6 +12,7 @@ const {
   doc,
   setDoc,
   deleteDoc,
+  limit,
 } = firestore;
 
 const createActivity = async (context) => {
@@ -22,6 +23,7 @@ const createActivity = async (context) => {
 
 const getActivities = async (context) => {
   const criteria = [];
+  const l = context?.limit > 10 ? 10 : context.limit;
   if (context?.type) {
     criteria.push(
       where('type', '==', context.type),
@@ -35,6 +37,9 @@ const getActivities = async (context) => {
     and(
       ...criteria,
     ),
+    ...context?.limit && [
+      limit(l),
+    ],
   );
   const snapshot = await getDocs(q);
   let res = [];
