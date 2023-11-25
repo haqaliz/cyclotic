@@ -104,6 +104,26 @@ const getMenstruationProductsRecommendations = async (context) => {
   return MP;
 };
 
+const getOtherProductsRecommendations = async () => {
+  // other products recommendations
+  const otherProducts = ['vibrator'];
+  const queryChain = [
+    collection(
+      firebase.db,
+      'recommendations',
+    ),
+  ];
+  queryChain.push(where('type', 'in', otherProducts));
+  const q = query(...queryChain);
+  const snapshot = await getDocs(q);
+  let results = [];
+  snapshot.forEach((i) => results.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return results;
+};
+
 const getRecommendationsForUser = async (context) => {
   const to = new Date();
   const from = subDays(to, 30);
@@ -113,6 +133,7 @@ const getRecommendationsForUser = async (context) => {
     hormoneHealthInsights,
     nutritionalGuidances,
     recommendedActivities,
+    otherProducts,
   ] = await Promise.all([
     flowIntensityPattern.getFlowIntensityForUser({
       user_id: context?.uid,
@@ -129,6 +150,7 @@ const getRecommendationsForUser = async (context) => {
     activities.getActivities({
       limit: 10,
     }),
+    getOtherProductsRecommendations(),
   ]);
   const flowIntensity = flowIntensityOverMonth?.[0]?.flow_intensity ?? 0;
   const smartMenstruationProducts = menstruationProducts.filter((i) => {
@@ -142,6 +164,7 @@ const getRecommendationsForUser = async (context) => {
     hormone_health_insights: hormoneHealthInsights,
     nutritional_guidances: nutritionalGuidances,
     activities: recommendedActivities,
+    other_products: otherProducts,
   };
 };
 
