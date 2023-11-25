@@ -13,7 +13,64 @@ const {
   where,
   getDocs,
   and,
+  getDoc,
+  setDoc,
+  limit,
+  doc,
+  deleteDoc,
 } = firestore;
+
+const createRecommendation = async (context) => {
+  const ref = doc(collection(firebase.db, 'recommendations'));
+  await setDoc(ref, context);
+  return ref;
+};
+
+const getRecommendations = async (context) => {
+  const criteria = [];
+  const l = context?.limit > 100 ? 100 : context.limit;
+  if (context?.type) {
+    criteria.push(
+      where('type', '==', context.type),
+    );
+  }
+  const q = query(
+    collection(
+      firebase.db,
+      'recommendations',
+    ),
+    and(
+      ...criteria,
+    ),
+    limit(l),
+  );
+  const snapshot = await getDocs(q);
+  let res = [];
+  snapshot.forEach((i) => res.push({
+    id: i.id,
+    ...i.data(),
+  }));
+  return res;
+};
+
+const updateRecommendation = async (context) => {
+  const ref = doc(firebase.db, 'recommendations', context.recommendation_id);
+  const snapshot = await getDoc(ref);
+  if (!snapshot.exists()) return;
+  await setDoc(ref, {
+    ...snapshot.data(),
+    ...context,
+  });
+  return ref;
+};
+
+const deleteRecommendation = async (context) => {
+  const ref = doc(firebase.db, 'recommendations', context.recommendation_id);
+  const snapshot = await getDoc(ref);
+  if (!snapshot.exists()) return;
+  await deleteDoc(ref);
+  return ref;
+};
 
 const getMenstruationProductsRecommendations = async (context) => {
   const prefs = context?.metadata?.prefs;
@@ -89,5 +146,10 @@ const getRecommendationsForUser = async (context) => {
 };
 
 module.exports = {
+  createRecommendation,
+  getRecommendations,
+  updateRecommendation,
+  deleteRecommendation,
+  getMenstruationProductsRecommendations,
   getRecommendationsForUser,
 };
