@@ -29,4 +29,10 @@ router.get(
   miscController.trends,
 );
 
+router.get(
+  '/brands',
+  utils.isPrivileged,
+  miscController.brands,
+)
+
 module.exports = router;

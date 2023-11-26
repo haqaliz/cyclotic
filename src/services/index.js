@@ -9,6 +9,7 @@ const notifications = require('./notifications');
 const recommendations = require('./recommendations');
 const insights = require('./insights');
 const activities = require('./activities');
+const miscellaneous = require('./miscellaneous');
 
 module.exports = {
     misc,
@@ -22,4 +23,5 @@ module.exports = {
     recommendations,
     insights,
     activities,
+    miscellaneous,
 };

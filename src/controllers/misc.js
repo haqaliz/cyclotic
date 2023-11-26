@@ -43,8 +43,16 @@ const trends = async (req, res) => {
     return res.send(r);
 };
 
+const brands = async (req, res) => {
+    const r = await services.miscellaneous.getMiscellaneousList({
+        key: 'brand',
+    });
+    return res.send(r);
+};
+
 module.exports = {
     contact,
     explore,
     trends,
+    brands,
 };
