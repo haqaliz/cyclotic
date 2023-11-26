@@ -11,6 +11,10 @@ const createRecommendation = [
     .optional()
     .trim()
     .notEmpty(),
+  body('name')
+    .optional()
+    .trim()
+    .notEmpty(),
   body('url')
     .optional()
     .trim()
@@ -35,6 +39,10 @@ const updateRecommendation = [
     .trim()
     .notEmpty(),
   body('brand')
+    .optional()
+    .trim()
+    .notEmpty(),
+  body('name')
     .optional()
     .trim()
     .notEmpty(),

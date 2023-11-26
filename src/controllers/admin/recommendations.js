@@ -4,6 +4,7 @@ const createRecommendation = async (req, res) => {
   const context = {
     type: req.body.type,
     brand: req.body.brand ?? '',
+    name: req.body.name ?? '',
     url: req.body.url ?? '',
     img: req.body.img ?? '',
     price: req.body.price ?? {},
@@ -18,6 +19,7 @@ const updateRecommendation = async (req, res) => {
     recommendation_id: req.params.recommendation_id,
     type: req.body.type,
     brand: req.body.brand ?? '',
+    name: req.body.name ?? '',
     url: req.body.url ?? '',
     img: req.body.img ?? '',
     price: req.body.price ?? {},
