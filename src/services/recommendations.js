@@ -106,14 +106,14 @@ const getMenstruationProductsRecommendations = async (context) => {
 
 const getOtherProductsRecommendations = async () => {
   // other products recommendations
-  const otherProducts = ['vibrator'];
+  const menstruationProducts = ['cup', 'pad', 'tampon'];
   const queryChain = [
     collection(
       firebase.db,
       'recommendations',
     ),
   ];
-  queryChain.push(where('type', 'in', otherProducts));
+  queryChain.push(where('type', 'not-in', menstruationProducts));
   const q = query(...queryChain);
   const snapshot = await getDocs(q);
   let results = [];
