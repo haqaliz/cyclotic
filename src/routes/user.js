@@ -213,4 +213,22 @@ router.get(
   userController.getConversationsListForAdvisor,
 );
 
+// get health regularity for a user
+router.get(
+  '/health/regularity',
+  utils.isPrivileged,
+  userValidator.getHealthRegularity,
+  utils.validate,
+  userController.getHealthRegularity,
+);
+
+// get health score for a user
+router.get(
+  '/health/score',
+  utils.isPrivileged,
+  userValidator.getHealthScore,
+  utils.validate,
+  userController.getHealthScore,
+);
+
 module.exports = router;

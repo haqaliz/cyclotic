@@ -503,6 +503,36 @@ const getConversationsListForAdvisor = [
     .notEmpty(),
 ];
 
+const getHealthRegularity = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+];
+
+const getHealthScore = [
+  query('from')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+  query('to')
+    .optional()
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .customSanitizer(sanitizeUnixEpoch),
+];
+
 module.exports = {
   getInfo,
   updateInfo,
@@ -524,4 +554,6 @@ module.exports = {
   getConversationForAdvisor,
   deleteConversationForAdvisor,
   getConversationsListForAdvisor,
+  getHealthRegularity,
+  getHealthScore,
 };

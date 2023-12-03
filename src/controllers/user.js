@@ -338,6 +338,26 @@ const getConversationsListForAdvisor = async (req, res) => {
   return res.send(r);
 };
 
+const getHealthRegularity = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await services.health.getHealthRegularity(context);
+  return res.send(r?.cycles ?? []);
+};
+
+const getHealthScore = async (req, res) => {
+  const context = {
+    user_id: req.user?.uid,
+    from: req.query.from,
+    to: req.query.to,
+  };
+  const r = await services.health.getHealthScore(context);
+  return res.send(r);
+};
+
 module.exports = {
   getToken,
   getUserPublicInfo,
@@ -363,4 +383,6 @@ module.exports = {
   getConversationForAdvisor,
   deleteConversationForAdvisor,
   getConversationsListForAdvisor,
+  getHealthRegularity,
+  getHealthScore,
 };
