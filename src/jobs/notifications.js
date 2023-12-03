@@ -43,7 +43,7 @@ module.exports = async () => {
                     type: 'fertility_window',
                     user_id: MCs[i]?.user_id,
                     email: to,
-                    reference_id: MCs[i]?.id,
+                    reference_id: MCs[i]?.recorded_day_id,
                     start_of_fertility_window: startFertileWindow,
                     day: diffSFW,
                 });
@@ -79,7 +79,7 @@ module.exports = async () => {
                     type: 'pms_symptoms',
                     user_id: MCs[i]?.user_id,
                     email: to,
-                    reference_id: MCs[i]?.id,
+                    reference_id: MCs[i]?.recorded_day_id,
                     start_of_menstrual_cycle: startRangeOfMC,
                     day: diffSRMC,
                 });

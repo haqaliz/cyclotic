@@ -44,20 +44,22 @@ const getStartOfLastMenstrualCycleForUser = async (userId) => {
   const q = query(
     collection(
       firebase.db,
-      'recorded_days',
+      'menstrual_cycles',
     ),
-    and(
-      where('user_id', '==', userId),
-      where('is_start', '==', true),
-    ),
+    where('user_id', '==', userId),
     orderBy('created_at', 'desc'),
     limit(1),
   );
-  const snapshot = await getDocs(q);
-  if (!snapshot.docs.length) return;
+  const mcSnapshot = await getDocs(q);
+  if (!mcSnapshot.docs.length) return;
+  const menstrualCycle = mcSnapshot.docs[0].data();
+  const ref = doc(firebase.db, 'recorded_days', menstrualCycle?.recorded_day_id);
+  const snapshot = await getDoc(ref);
+  if (!snapshot.exists()) return;
+  const recordedDay = snapshot.data();
   return {
-    id: snapshot.docs[0].id, 
-    ...snapshot.docs[0].data(),
+    id: snapshot.id, 
+    ...recordedDay,
   };
 };
 
@@ -93,6 +95,14 @@ const addRecordedDayForUser = async (context) => {
     },
     updated_at: context.created_at,
   });
+  if (MCStarted) {
+    const mcRef = doc(collection(firebase.db, 'menstrual_cycles'));
+    await setDoc(mcRef, {
+      user_id: context?.user_id,
+      recorded_day_id: ref.id,
+      created_at: context?.created_at,
+    });
+  }
   return ref;
 };
 
@@ -119,14 +129,14 @@ const getMenstrualCyclesForUser = async (context) => {
   const q = query(
     collection(
       firebase.db,
-      'recorded_days',
+      'menstrual_cycles',
     ),
     and(
       where('user_id', '==', context?.user_id),
       where('created_at', '>=', context?.from),
       where('created_at', '<=', context?.to),
-      where('is_start', '==', true),
     ),
+    orderBy('created_at', 'asc'),
   );
   const snapshot = await getDocs(q);
   let res = [];
@@ -150,12 +160,9 @@ const getStartOfLastMenstrualCycleForAllUsers = async () => {
   const q = query(
     collection(
       firebase.db,
-      'recorded_days',
+      'menstrual_cycles',
     ),
-    and(
-      where('created_at', '>=', subDays(new Date(), 30)),
-      where('is_start', '==', true),
-    ),
+    where('created_at', '>=', subDays(new Date(), 30)),
     orderBy('created_at', 'desc'),
   );
   // we need to add limit to this query
